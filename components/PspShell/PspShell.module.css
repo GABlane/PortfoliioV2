@@ -1,0 +1,379 @@
+/* =====================================================
+   PSP Shell — stylized handheld frame
+   Dimensions: 720 × 368px body + 26px shoulder protrusion
+   Screen: 460 × 272px at x=130, y=32
+   ===================================================== */
+
+.shell {
+  position: relative;
+  width: 720px;
+  height: 368px;
+  background:
+    radial-gradient(ellipse 55% 35% at 28% 12%, rgba(255,255,255,0.045) 0%, transparent 55%),
+    linear-gradient(162deg, #1d1d1d 0%, #0e0e0e 30%, #121212 60%, #090909 100%);
+  border-radius: 20px 20px 32px 32px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.055),
+    0 0 0 3px rgba(10,10,10,0.9),
+    0 32px 90px rgba(0,0,0,0.9),
+    0 10px 30px rgba(0,0,0,0.6);
+  overflow: visible;
+  flex-shrink: 0;
+}
+
+/* ── Top highlight edge ── */
+.shell::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
+  border-radius: 1px;
+}
+
+/* ── Silver strip ── */
+.silverStrip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 13px;
+  background: linear-gradient(180deg,
+    #cccac8 0%,
+    #b0aeac 40%,
+    #909090 70%,
+    #787878 100%
+  );
+  border-radius: 20px 20px 0 0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 1px 0 rgba(0,0,0,0.4);
+}
+
+/* ── Shoulder buttons ── */
+.shoulder {
+  position: absolute;
+  top: -16px;
+  height: 28px;
+  width: 136px;
+  background:
+    linear-gradient(175deg, #252525 0%, #141414 60%, #0e0e0e 100%);
+  border-radius: 8px 8px 0 0;
+  box-shadow:
+    0 -1px 0 rgba(255,255,255,0.07),
+    0 -3px 8px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shoulderL { left: 18px; }
+.shoulderR { right: 18px; }
+
+.shoulderLabel {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.08em;
+  user-select: none;
+}
+
+/* ── Gloss highlight ── */
+.glossHighlight {
+  position: absolute;
+  top: 13px;
+  left: 8px;
+  right: 8px;
+  height: 80px;
+  background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(255,255,255,0.028) 0%, transparent 100%);
+  pointer-events: none;
+  border-radius: 0 0 50% 50%;
+}
+
+/* ── Speaker grilles ── */
+.speaker {
+  position: absolute;
+  top: 52px;
+  width: 38px;
+  height: 118px;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.14) 1.2px, transparent 1.2px);
+  background-size: 7px 7px;
+  background-position: 0 0;
+  border-radius: 4px;
+}
+
+.speakerLeft  { left: 10px; }
+.speakerRight { right: 10px; }
+
+/* ── Left controls ── */
+.leftControls {
+  position: absolute;
+  left: 0;
+  top: 14px;
+  width: 130px;
+  height: 282px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+/* ── D-Pad ── */
+.dpad {
+  position: relative;
+  width: 74px;
+  height: 74px;
+  margin-top: 44px;
+}
+
+.dpadH,
+.dpadV {
+  position: absolute;
+  background: linear-gradient(145deg, #242424 0%, #161616 60%, #1a1a1a 100%);
+  border-radius: 3px;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.06),
+    0 2px 4px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+.dpadH {
+  width: 100%;
+  height: 33.3%;
+  top: 33.3%;
+}
+
+.dpadV {
+  width: 33.3%;
+  height: 100%;
+  left: 33.3%;
+}
+
+.dpadCenter {
+  position: absolute;
+  width: 33.3%;
+  height: 33.3%;
+  top: 33.3%;
+  left: 33.3%;
+  background: #141414;
+  z-index: 1;
+  border-radius: 2px;
+}
+
+.dpadArrow {
+  position: absolute;
+  font-size: 5px;
+  color: rgba(255,255,255,0.2);
+  z-index: 2;
+  line-height: 1;
+}
+.dpadUp    { top: 3px;    left: 50%; transform: translateX(-50%); }
+.dpadDown  { bottom: 3px; left: 50%; transform: translateX(-50%); }
+.dpadLeft  { left: 3px;   top: 50%;  transform: translateY(-50%); }
+.dpadRight { right: 3px;  top: 50%;  transform: translateY(-50%); }
+
+/* ── Analog nub ── */
+.analogNub {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  margin-top: 22px;
+  margin-right: 18px;
+  background: radial-gradient(circle at 38% 38%, #2e2e2e 0%, #181818 55%, #0f0f0f 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06),
+    0 2px 6px rgba(0,0,0,0.7),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  position: relative;
+}
+
+.analogNub::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, rgba(255,255,255,0.06) 0%, transparent 60%);
+}
+
+/* ── Screen bezel ── */
+.screenBezel {
+  position: absolute;
+  left: 130px;
+  top: 18px;
+  width: 460px;
+  height: 280px;
+  background: #060606;
+  border-radius: 4px;
+  padding: 4px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04),
+    inset 0 2px 8px rgba(0,0,0,0.8),
+    inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+.screenFrame {
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* ── Right controls ── */
+.rightControls {
+  position: absolute;
+  right: 0;
+  top: 14px;
+  width: 130px;
+  height: 282px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Face buttons ── */
+.faceButtons {
+  position: relative;
+  width: 74px;
+  height: 74px;
+  margin-top: 44px;
+}
+
+.faceBtn {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  line-height: 1;
+  background: radial-gradient(circle at 40% 35%, #282828 0%, #181818 55%, #111 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06),
+    0 2px 5px rgba(0,0,0,0.7),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  user-select: none;
+}
+
+/* Positions: Diamond formation */
+.triangle { top: 0;    left: 50%; transform: translateX(-50%); color: #7cc8c4; }
+.square   { left: 0;   top: 50%;  transform: translateY(-50%); color: #9898cc; }
+.cross    { bottom: 0; left: 50%; transform: translateX(-50%); color: #7ab0d8; }
+.circle   { right: 0;  top: 50%;  transform: translateY(-50%); color: #d88880; }
+
+/* ── Home button ── */
+.homeBtn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #222 0%, #141414 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.05),
+    0 2px 4px rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 18px;
+  margin-left: 10px;
+}
+
+.homeBtnInner {
+  font-size: 10px;
+  color: rgba(255,255,255,0.2);
+  line-height: 1;
+}
+
+/* ── Power / Hold edge labels ── */
+.powerLabel,
+.holdLabel {
+  position: absolute;
+  right: -1px;
+  font-family: var(--font-ui);
+  font-size: 6px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.2);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  user-select: none;
+}
+
+.powerLabel { top: 188px; }
+.holdLabel  { top: 238px; }
+
+/* ── Bottom bar ── */
+.bottomBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 44px;
+  background:
+    linear-gradient(0deg, rgba(255,255,255,0.018) 0%, transparent 100%),
+    rgba(0,0,0,0.25);
+  border-top: 1px solid rgba(255,255,255,0.04);
+  border-radius: 0 0 32px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+}
+
+.bottomLeft,
+.bottomRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.statusLed {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #2a6e2a;
+  box-shadow: 0 0 4px #3a9e3a;
+}
+
+.volBtn {
+  font-size: 8px;
+  color: rgba(255,255,255,0.22);
+  cursor: default;
+  user-select: none;
+  line-height: 1;
+}
+
+.dispBtn {
+  font-size: 8px;
+  color: rgba(255,255,255,0.18);
+  cursor: default;
+  user-select: none;
+}
+
+.pspLogo {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: rgba(255,255,255,0.22);
+  user-select: none;
+  text-transform: uppercase;
+}
+
+.ctrlBtn {
+  font-family: var(--font-ui);
+  font-size: 6.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.2);
+  user-select: none;
+  text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 2px;
+  padding: 2px 4px;
+}

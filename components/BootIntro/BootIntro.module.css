@@ -1,0 +1,104 @@
+.root {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+/* Dark scrim that lifts during boot */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: #040810;
+  pointer-events: none;
+}
+
+/* Standby state */
+.standby {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  cursor: pointer;
+}
+
+.powerIcon {
+  font-size: clamp(28px, 3.5vw, 48px);
+  color: rgba(255, 255, 255, 0.18);
+  animation: powerPulse 2.8s ease-in-out infinite;
+  line-height: 1;
+}
+
+.pressPrompt {
+  font-family: var(--font-ui);
+  font-size: clamp(9px, 0.75vw, 11px);
+  font-weight: 300;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.18);
+  animation: promptBlink 2.8s ease-in-out infinite;
+}
+
+@keyframes powerPulse {
+  0%, 100% { opacity: 0.4;  transform: scale(1); }
+  50%       { opacity: 0.85; transform: scale(1.06); }
+}
+
+@keyframes promptBlink {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1;   }
+}
+
+/* Boot text block */
+.center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.label {
+  font-family: var(--font-ui);
+  font-size: clamp(9px, 0.75vw, 11px);
+  font-weight: 300;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  line-height: 1;
+}
+
+.name {
+  font-family: var(--font-ui);
+  font-size: clamp(36px, 5.5vw, 72px);
+  font-weight: 300;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.nameLine {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(74, 144, 217, 0.8),
+    transparent
+  );
+  transform-origin: left center;
+}

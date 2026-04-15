@@ -1,0 +1,73 @@
+.root {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.baseGrad {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 70% 20%, rgba(30, 60, 140, 0.35) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 50% at 20% 80%, rgba(20, 45, 110, 0.25) 0%, transparent 60%),
+    linear-gradient(175deg, #0c1628 0%, #080e1c 45%, #060a14 100%);
+}
+
+.waveLayer {
+  position: absolute;
+  bottom: 0;
+  left: -10%;
+  width: 120%;
+  height: 100%;
+}
+
+.wave3 {
+  fill: rgba(18, 45, 110, 0.4);
+  animation: waveSlide3 14s ease-in-out infinite alternate;
+}
+
+.wave2 {
+  fill: rgba(14, 36, 88, 0.5);
+  animation: waveSlide2 10s ease-in-out infinite alternate;
+}
+
+.wave1 {
+  fill: rgba(8, 22, 58, 0.7);
+  animation: waveSlide1 7s ease-in-out infinite alternate;
+}
+
+.shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    125deg,
+    transparent 0%,
+    rgba(74, 144, 217, 0.03) 40%,
+    transparent 60%,
+    rgba(74, 144, 217, 0.02) 80%,
+    transparent 100%
+  );
+  animation: shimmerDrift 18s ease-in-out infinite;
+}
+
+@keyframes waveSlide1 {
+  from { transform: translateX(0) scaleY(1); }
+  to   { transform: translateX(4%) scaleY(1.04); }
+}
+
+@keyframes waveSlide2 {
+  from { transform: translateX(0) scaleY(1); }
+  to   { transform: translateX(-5%) scaleY(0.97); }
+}
+
+@keyframes waveSlide3 {
+  from { transform: translateX(0) scaleY(1); }
+  to   { transform: translateX(3%) scaleY(1.06); }
+}
+
+@keyframes shimmerDrift {
+  0%, 100% { opacity: 1; transform: translateX(0); }
+  50%       { opacity: 0.6; transform: translateX(2%); }
+}
