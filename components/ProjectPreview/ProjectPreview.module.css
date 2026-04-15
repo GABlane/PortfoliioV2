@@ -1,0 +1,79 @@
+.card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 8;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.gradient {
+  position: absolute;
+  inset: 0;
+}
+
+.stripe {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  opacity: 0.9;
+}
+
+.grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  height: 100%;
+}
+
+.initials {
+  font-family: var(--font-ui);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  user-select: none;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.title {
+  font-family: var(--font-mono);
+  font-size: clamp(10px, 0.85vw, 12px);
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font-family: var(--font-ui);
+  font-size: clamp(9px, 0.75vw, 11px);
+  color: rgba(255, 255, 255, 0.2);
+  font-weight: 300;
+}
+
+.corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+}

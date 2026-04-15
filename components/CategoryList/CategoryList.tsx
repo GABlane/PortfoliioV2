@@ -15,17 +15,29 @@ interface Props {
 
 export default function CategoryList({ items, activeItemId, categoryId, onSelect }: Props) {
   const ulRef = useRef<HTMLUListElement>(null);
+  const itemRefs = useRef<Map<string, HTMLLIElement>>(new Map());
   const [canScrollDown, setCanScrollDown] = useState(false);
 
+  // Check overflow
   useEffect(() => {
     const el = ulRef.current;
     if (!el) return;
-    const check = () => setCanScrollDown(el.scrollHeight > el.clientHeight + 4);
+    const check = () => {
+      const has = el.scrollHeight > el.clientHeight + 4;
+      setCanScrollDown(has && el.scrollTop + el.clientHeight < el.scrollHeight - 4);
+    };
     check();
+    el.addEventListener('scroll', check, { passive: true });
     const ro = new ResizeObserver(check);
     ro.observe(el);
-    return () => ro.disconnect();
+    return () => { ro.disconnect(); el.removeEventListener('scroll', check); };
   }, [items]);
+
+  // Auto-scroll active item into view
+  useEffect(() => {
+    const li = itemRefs.current.get(activeItemId);
+    if (li) li.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }, [activeItemId]);
 
   return (
     <div className={styles.list} role="listbox" aria-label="Items">
@@ -44,6 +56,10 @@ export default function CategoryList({ items, activeItemId, categoryId, onSelect
             return (
               <motion.li
                 key={item.id}
+                ref={(el) => {
+                  if (el) itemRefs.current.set(item.id, el);
+                  else itemRefs.current.delete(item.id);
+                }}
                 className={`${styles.item} ${isActive ? styles.active : ''}`}
                 role="option"
                 aria-selected={isActive}

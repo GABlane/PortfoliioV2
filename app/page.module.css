@@ -27,20 +27,48 @@
   z-index: 1;
 }
 
-/* Context hints strip */
+/* Hint bar — PSP-style keycap labels */
 .hints {
-  height: 32px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 40px;
-  font-family: var(--font-ui);
-  font-size: clamp(10px, 0.85vw, 12px);
-  font-weight: 300;
-  letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.2);
+  gap: 28px;
   flex-shrink: 0;
   position: relative;
   z-index: 1;
   border-top: 1px solid rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+
+.hintKey {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.hintKey kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 18px;
+  padding: 0 5px;
+  font-family: var(--font-mono);
+  font-size: clamp(8px, 0.7vw, 10px);
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  line-height: 1;
+}
+
+.hintLabel {
+  font-family: var(--font-ui);
+  font-size: clamp(9px, 0.75vw, 11px);
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.2);
+  margin-left: 4px;
 }

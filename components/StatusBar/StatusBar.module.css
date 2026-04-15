@@ -1,0 +1,31 @@
+.bar {
+  position: absolute;
+  top: clamp(10px, 1.5vh, 18px);
+  right: clamp(16px, 2.5vw, 36px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.date {
+  font-family: var(--font-ui);
+  font-size: clamp(10px, 0.8vw, 12px);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.06em;
+}
+
+.sep {
+  width: 1px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.time {
+  font-family: var(--font-mono);
+  font-size: clamp(10px, 0.8vw, 12px);
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.04em;
+}

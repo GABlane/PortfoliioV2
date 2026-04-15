@@ -10,6 +10,7 @@ import WaveBackground from '@/components/WaveBackground/WaveBackground';
 import XmbNav from '@/components/XmbNav/XmbNav';
 import CategoryList from '@/components/CategoryList/CategoryList';
 import DetailPanel from '@/components/DetailPanel/DetailPanel';
+import StatusBar from '@/components/StatusBar/StatusBar';
 import BootIntro from '@/components/BootIntro/BootIntro';
 import styles from './page.module.css';
 
@@ -20,6 +21,8 @@ export default function Home() {
   const { playConfirm } = useNavSound();
   const containerRef = useRef<HTMLDivElement>(null);
   const [bootState, setBootState] = useState<BootState>('loading');
+
+  const hasCta = Boolean(nav.activeItem.ctaHref);
 
   // Resolve boot state after mount (sessionStorage unavailable on server)
   useEffect(() => {
@@ -71,16 +74,16 @@ export default function Home() {
       aria-label="Portfolio — use arrow keys to navigate"
     >
       <ScreenViewport>
-        {/* Wave background — always visible, shared by intro + XMB */}
         <WaveBackground />
 
-        {/* XMB UI — fades in after intro */}
         <motion.div
           className={styles.xmbLayer}
           animate={{ opacity: bootState === 'done' ? 1 : 0 }}
           transition={{ duration: 0.9, ease: 'easeOut' }}
           style={{ pointerEvents: bootState === 'done' ? 'auto' : 'none' }}
         >
+          <StatusBar />
+
           <XmbNav
             categories={categories}
             activeCategoryId={nav.state.activeCategoryId}
@@ -99,12 +102,31 @@ export default function Home() {
           </div>
 
           <div className={styles.hints} aria-hidden="true">
-            <span>← → Category</span>
-            <span>↑ ↓ Navigate</span>
+            <span className={styles.hintKey}>
+              <kbd>←</kbd><kbd>→</kbd>
+              <span className={styles.hintLabel}>Category</span>
+            </span>
+            <span className={styles.hintKey}>
+              <kbd>↑</kbd><kbd>↓</kbd>
+              <span className={styles.hintLabel}>Navigate</span>
+            </span>
+            <AnimatePresence>
+              {hasCta && (
+                <motion.span
+                  className={styles.hintKey}
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: 'auto' }}
+                  exit={{ opacity: 0, width: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <kbd>Enter</kbd>
+                  <span className={styles.hintLabel}>Open</span>
+                </motion.span>
+              )}
+            </AnimatePresence>
           </div>
         </motion.div>
 
-        {/* Boot intro overlay — on top of waves, removed when done */}
         <AnimatePresence>
           {bootState === 'intro' && (
             <BootIntro onComplete={handleIntroComplete} />

@@ -13,7 +13,7 @@ export const categories: PortfolioCategory[] = [
         subtitle: 'Aspiring Software Engineer',
         description:
           'Computer Science student at the University of Caloocan City building real-world systems — from IoT ecosystems to full-stack web apps. Based in Caloocan City, Philippines.',
-        meta: 'Caloocan City, PH · BSCS 2023–Present',
+        tags: ['Caloocan City, PH', 'BSCS 2023–Present'],
       },
       {
         id: 'philosophy',
@@ -30,7 +30,7 @@ export const categories: PortfolioCategory[] = [
         subtitle: 'Honors & Recognition',
         description:
           '1st Place in the University of Caloocan C Programming Competition (Feb 2023). Passed TESDA Call Center NC II Training (Jan 2024). BSCS Representative for the Department of Liberal Arts and Sciences.',
-        meta: 'C Programming · TESDA NC II · Student Gov',
+        tags: ['C Programming', 'TESDA NC II', 'Student Gov'],
       },
     ],
   },
@@ -46,8 +46,9 @@ export const categories: PortfolioCategory[] = [
         subtitle: 'Inventory & POS System',
         description:
           'Centralized POS and inventory system for a local repair shop. Architected the backend, designed a normalized ERD, documented RESTful APIs with Swagger, and integrated Google OAuth for role-based auth.',
-        meta: 'Laravel · MySQL · Swagger · Google OAuth',
-        ctaLabel: 'GitHub',
+        tags: ['Laravel', 'MySQL', 'Swagger', 'Google OAuth'],
+        image: 'placeholder',
+        ctaLabel: 'View on GitHub',
         ctaHref: 'https://github.com/99lash/pacadaworkz-motomedic-ims-app',
       },
       {
@@ -57,8 +58,9 @@ export const categories: PortfolioCategory[] = [
         subtitle: 'IoT Ecosystem',
         description:
           'High-security smart vault with 2FA locking and anti-tamper detection. Built a React Native mobile app for real-time monitoring and engineered the FastAPI/Uvicorn backend for low-latency IoT communication.',
-        meta: 'React Native · Python · FastAPI · SQLite',
-        ctaLabel: 'GitHub',
+        tags: ['React Native', 'Python', 'FastAPI', 'SQLite'],
+        image: 'placeholder',
+        ctaLabel: 'View on GitHub',
         ctaHref: 'https://github.com/XpnsiveSharks/smartvault-app',
       },
       {
@@ -68,8 +70,9 @@ export const categories: PortfolioCategory[] = [
         subtitle: 'E-Commerce Platform',
         description:
           'Full-stack e-commerce platform with a Next.js + TypeScript frontend and PHP backend. Gained deep experience in complex state management across a modern web architecture and database normalization.',
-        meta: 'Next.js · TypeScript · PHP · MySQL',
-        ctaLabel: 'GitHub',
+        tags: ['Next.js', 'TypeScript', 'PHP', 'MySQL'],
+        image: 'placeholder',
+        ctaLabel: 'View on GitHub',
         ctaHref: 'https://github.com/XpnsiveSharks/gearfalcon-frontend',
       },
       {
@@ -79,8 +82,9 @@ export const categories: PortfolioCategory[] = [
         subtitle: 'Desktop Game',
         description:
           'Desktop game implementing the Four Pillars of OOP — Encapsulation, Inheritance, Polymorphism, and Abstraction. GUI built with Java Swing for an interactive experience.',
-        meta: 'Java · Java Swing · OOP',
-        ctaLabel: 'GitHub',
+        tags: ['Java', 'Java Swing', 'OOP'],
+        image: 'placeholder',
+        ctaLabel: 'View on GitHub',
         ctaHref: 'https://github.com/GABlane/Case-Study-Game',
       },
       {
@@ -90,8 +94,9 @@ export const categories: PortfolioCategory[] = [
         subtitle: 'Hackathon Project',
         description:
           'Community-focused web app built during a hackathon to deliver emergency checklists and safety protocols for typhoon-prone areas. Optimized for responsive design and fast load times.',
-        meta: 'Vanilla JS · HTML5 · CSS3',
-        ctaLabel: 'GitHub',
+        tags: ['Vanilla JS', 'HTML5', 'CSS3'],
+        image: 'placeholder',
+        ctaLabel: 'View on GitHub',
         ctaHref: 'https://github.com/99lash/BagyoAlerto',
       },
     ],
@@ -105,41 +110,46 @@ export const categories: PortfolioCategory[] = [
         id: 'languages',
         icon: 'code' as const,
         title: 'Languages',
-        subtitle: 'TypeScript · JavaScript · Java · PHP · Kotlin · C#',
+        subtitle: 'Core programming languages',
         description:
           'Polyglot across the stack. TypeScript and JavaScript for web, Java and Kotlin for OOP and Android-adjacent work, PHP for backend systems, C# for desktop and game tooling.',
+        tags: ['TypeScript', 'JavaScript', 'Java', 'PHP', 'Kotlin', 'C#'],
       },
       {
         id: 'frontend',
         icon: 'monitor' as const,
         title: 'Frontend',
-        subtitle: 'React · Next.js · React Native · Redux · Vite · Tailwind',
+        subtitle: 'UI frameworks & tooling',
         description:
           'Building web and mobile interfaces from scratch — SPA to SSR, component libraries to cross-platform Expo apps. Comfortable with Redux state management and modern build tooling.',
+        tags: ['React', 'Next.js', 'React Native', 'Redux', 'Vite', 'Tailwind'],
       },
       {
         id: 'backend',
         icon: 'server' as const,
         title: 'Backend',
-        subtitle: 'Node.js · NestJS · Express · FastAPI · Laravel',
+        subtitle: 'Server frameworks & APIs',
         description:
           'REST API design across multiple frameworks and runtimes. Node/Express for lightweight services, NestJS for structured architectures, FastAPI for IoT/Python backends, Laravel for PHP MVC systems.',
+        tags: ['Node.js', 'NestJS', 'Express', 'FastAPI', 'Laravel'],
       },
       {
         id: 'database',
         icon: 'database' as const,
         title: 'Database',
-        subtitle: 'PostgreSQL · MySQL · MongoDB · SQLite · Firebase',
+        subtitle: 'Data stores & modeling',
         description:
           'Relational database design with normalized ERDs and parameterized queries. MongoDB for document stores, Firebase for real-time and auth, SQLite for embedded and mobile data.',
+        tags: ['PostgreSQL', 'MySQL', 'MongoDB', 'SQLite', 'Firebase'],
       },
       {
         id: 'devops',
         icon: 'wrench' as const,
         title: 'DevOps & Tools',
-        subtitle: 'Git · Docker · Vercel · Postman · Swagger · Arduino',
+        subtitle: 'Build, deploy & integrate',
         description:
           'Full lifecycle from local dev to deployment. Docker for containerization, Vercel/Netlify/Firebase for hosting, Postman and Swagger for API documentation, Arduino for IoT hardware integration.',
+        tags: ['Git', 'Docker', 'Vercel', 'Postman', 'Swagger', 'Arduino'],
       },
     ],
   },
@@ -155,7 +165,7 @@ export const categories: PortfolioCategory[] = [
         subtitle: 'University of Caloocan City · 2023–Present',
         description:
           'Currently pursuing a BSCS degree with focus on software engineering. Active in competitive programming and building production-grade systems as academic projects.',
-        meta: 'Caloocan City · Full-time Student',
+        tags: ['Caloocan City', 'Full-time Student'],
       },
       {
         id: 'shs',
@@ -164,7 +174,7 @@ export const categories: PortfolioCategory[] = [
         subtitle: 'System Plus Computer College · 2020–2023',
         description:
           'Completed Senior High School with a tech track at System Plus Computer College. Foundation in programming and IT fundamentals.',
-        meta: 'Caloocan City',
+        tags: ['Caloocan City'],
       },
       {
         id: 'bscs-rep',
@@ -173,7 +183,7 @@ export const categories: PortfolioCategory[] = [
         subtitle: 'Dept. of Liberal Arts & Sciences · 2023–2025',
         description:
           'Elected student representative for the BSCS program within the CLAS department. Bridging student concerns and academic governance.',
-        meta: 'University of Caloocan City',
+        tags: ['University of Caloocan City'],
       },
       {
         id: 'orgs',
@@ -182,7 +192,7 @@ export const categories: PortfolioCategory[] = [
         subtitle: 'MIS · ACES · 2023–2026',
         description:
           'Active member of the Management Information System (MIS) and Association of Computer E-Students (ACES) organizations — participating in tech events, workshops, and community initiatives.',
-        meta: 'University of Caloocan City',
+        tags: ['University of Caloocan City'],
       },
     ],
   },

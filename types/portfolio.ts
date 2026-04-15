@@ -12,6 +12,8 @@ export interface PortfolioItem {
   description: string;
   icon?: ItemIconType;
   meta?: string;
+  tags?: string[];
+  image?: string;
   ctaLabel?: string;
   ctaHref?: string;
 }
