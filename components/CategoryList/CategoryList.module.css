@@ -30,11 +30,12 @@
   right: 0;
   text-align: center;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.3);
-  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5));
+  color: var(--scroll-hint-text);
+  background: linear-gradient(to bottom, transparent, var(--scroll-hint-gradient));
   padding: 16px 0 4px;
   pointer-events: none;
   animation: pulse 1.8s ease-in-out infinite;
+  transition: color 0.3s ease, background 0.4s ease;
 }
 
 @keyframes pulse {
@@ -64,22 +65,22 @@
   bottom: 20%;
   width: 2px;
   border-radius: 2px;
-  background: var(--xmb-accent, #4a90d9);
+  background: var(--xmb-accent);
   opacity: 0;
   transition: opacity 0.2s ease;
 }
 
 .item.active::before {
   opacity: 1;
-  box-shadow: 0 0 8px rgba(74, 144, 217, 0.6);
+  box-shadow: 0 0 8px var(--accent-glow-strong);
 }
 
 .item.active {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-item-active);
 }
 
 .item:hover:not(.active) {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bg-item-hover);
 }
 
 /* Icon */
@@ -97,8 +98,8 @@
   width: 18px;
   height: 18px;
   display: block;
-  color: rgba(255, 255, 255, 0.3);
-  transition: color 0.2s ease;
+  color: var(--text-ghost);
+  transition: color 0.2s ease, filter 0.2s ease;
 }
 
 .icon svg {
@@ -107,19 +108,20 @@
 }
 
 .item.active .icon {
-  color: var(--xmb-accent, #4a90d9);
-  filter: drop-shadow(0 0 4px rgba(74, 144, 217, 0.5));
+  color: var(--xmb-accent);
+  filter: drop-shadow(0 0 4px var(--accent-icon-shadow));
 }
 
 /* Bullet fallback */
 .bullet {
   font-size: 8px;
-  color: rgba(255, 255, 255, 0.25);
+  color: var(--text-ghost);
   line-height: 20px;
+  transition: color 0.2s ease;
 }
 
 .item.active .bullet {
-  color: var(--xmb-accent, #4a90d9);
+  color: var(--xmb-accent);
   font-size: 10px;
 }
 
@@ -135,7 +137,7 @@
   font-family: var(--font-ui);
   font-size: clamp(14px, 1.4vw, 17px);
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-secondary);
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -144,7 +146,7 @@
 
 .item.active .title {
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .subtitle {
@@ -152,7 +154,8 @@
   font-family: var(--font-ui);
   font-size: clamp(11px, 1vw, 13px);
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-muted);
   line-height: 1.3;
   overflow: hidden;
+  transition: color 0.3s ease;
 }

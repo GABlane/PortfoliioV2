@@ -37,8 +37,9 @@
   flex-shrink: 0;
   position: relative;
   z-index: 1;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-top: 1px solid var(--border-faint);
   overflow: hidden;
+  transition: border-color 0.3s ease;
 }
 
 .hintKey {
@@ -57,11 +58,12 @@
   padding: 0 5px;
   font-family: var(--font-mono);
   font-size: clamp(8px, 0.7vw, 10px);
-  color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--kbd-text);
+  background: var(--kbd-bg);
+  border: 1px solid var(--kbd-border);
   border-radius: 3px;
   line-height: 1;
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .hintLabel {
@@ -69,6 +71,7 @@
   font-size: clamp(9px, 0.75vw, 11px);
   font-weight: 300;
   letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--text-faint);
   margin-left: 4px;
+  transition: color 0.3s ease;
 }

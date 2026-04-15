@@ -10,9 +10,10 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 70% 20%, rgba(30, 60, 140, 0.35) 0%, transparent 65%),
-    radial-gradient(ellipse 60% 50% at 20% 80%, rgba(20, 45, 110, 0.25) 0%, transparent 60%),
-    linear-gradient(175deg, #0c1628 0%, #080e1c 45%, #060a14 100%);
+    radial-gradient(ellipse 80% 60% at 70% 20%, var(--wave-grad-1) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 50% at 20% 80%, var(--wave-grad-2) 0%, transparent 60%),
+    linear-gradient(175deg, var(--wave-grad-base-start) 0%, var(--wave-grad-base-mid) 45%, var(--wave-grad-base-end) 100%);
+  transition: background 0.4s ease;
 }
 
 .waveLayer {
@@ -24,18 +25,21 @@
 }
 
 .wave3 {
-  fill: rgba(18, 45, 110, 0.4);
+  fill: var(--wave-fill-3);
   animation: waveSlide3 14s ease-in-out infinite alternate;
+  transition: fill 0.4s ease;
 }
 
 .wave2 {
-  fill: rgba(14, 36, 88, 0.5);
+  fill: var(--wave-fill-2);
   animation: waveSlide2 10s ease-in-out infinite alternate;
+  transition: fill 0.4s ease;
 }
 
 .wave1 {
-  fill: rgba(8, 22, 58, 0.7);
+  fill: var(--wave-fill-1);
   animation: waveSlide1 7s ease-in-out infinite alternate;
+  transition: fill 0.4s ease;
 }
 
 .shimmer {
@@ -44,12 +48,13 @@
   background: linear-gradient(
     125deg,
     transparent 0%,
-    rgba(74, 144, 217, 0.03) 40%,
+    var(--wave-shimmer) 40%,
     transparent 60%,
-    rgba(74, 144, 217, 0.02) 80%,
+    var(--wave-shimmer) 80%,
     transparent 100%
   );
   animation: shimmerDrift 18s ease-in-out infinite;
+  transition: background 0.4s ease;
 }
 
 @keyframes waveSlide1 {

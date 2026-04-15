@@ -4,8 +4,9 @@
   aspect-ratio: 16 / 8;
   border-radius: 8px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-faint);
   flex-shrink: 0;
+  transition: border-color 0.3s ease;
 }
 
 .gradient {
@@ -26,9 +27,10 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    linear-gradient(var(--preview-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--preview-grid) 1px, transparent 1px);
   background-size: 24px 24px;
+  transition: background-image 0.3s ease;
 }
 
 .content {
@@ -58,16 +60,18 @@
 .title {
   font-family: var(--font-mono);
   font-size: clamp(10px, 0.85vw, 12px);
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--preview-title);
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  transition: color 0.3s ease;
 }
 
 .subtitle {
   font-family: var(--font-ui);
   font-size: clamp(9px, 0.75vw, 11px);
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--preview-subtitle);
   font-weight: 300;
+  transition: color 0.3s ease;
 }
 
 .corner {

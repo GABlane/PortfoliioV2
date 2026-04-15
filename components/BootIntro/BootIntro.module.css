@@ -12,8 +12,9 @@
 .overlay {
   position: absolute;
   inset: 0;
-  background: #040810;
+  background: var(--bg-boot-overlay);
   pointer-events: none;
+  transition: background-color 0.4s ease;
 }
 
 /* Standby state */
@@ -28,9 +29,10 @@
 
 .powerIcon {
   font-size: clamp(28px, 3.5vw, 48px);
-  color: rgba(255, 255, 255, 0.18);
+  color: var(--text-faint);
   animation: powerPulse 2.8s ease-in-out infinite;
   line-height: 1;
+  transition: color 0.3s ease;
 }
 
 .pressPrompt {
@@ -39,8 +41,9 @@
   font-weight: 300;
   letter-spacing: 0.35em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.18);
+  color: var(--text-faint);
   animation: promptBlink 2.8s ease-in-out infinite;
+  transition: color 0.3s ease;
 }
 
 @keyframes powerPulse {
@@ -77,8 +80,9 @@
   font-weight: 300;
   letter-spacing: 0.45em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--text-subtle);
   line-height: 1;
+  transition: color 0.3s ease;
 }
 
 .name {
@@ -87,8 +91,9 @@
   font-weight: 300;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #ffffff;
+  color: var(--text-primary);
   line-height: 1;
+  transition: color 0.3s ease;
 }
 
 .nameLine {
@@ -97,8 +102,9 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(74, 144, 217, 0.8),
+    var(--accent-line),
     transparent
   );
   transform-origin: left center;
+  transition: background 0.4s ease;
 }

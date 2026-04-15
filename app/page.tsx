@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigation } from '@/hooks/useNavigation';
 import { useNavSound } from '@/hooks/useNavSound';
+import { useTheme } from '@/hooks/useTheme';
 import { categories } from '@/data/content';
 import ScreenViewport from '@/components/ScreenViewport/ScreenViewport';
 import WaveBackground from '@/components/WaveBackground/WaveBackground';
@@ -19,6 +20,7 @@ type BootState = 'loading' | 'intro' | 'done';
 export default function Home() {
   const nav = useNavigation(categories);
   const { playConfirm } = useNavSound();
+  const { theme, toggleTheme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const [bootState, setBootState] = useState<BootState>('loading');
 
@@ -82,7 +84,7 @@ export default function Home() {
           transition={{ duration: 0.9, ease: 'easeOut' }}
           style={{ pointerEvents: bootState === 'done' ? 'auto' : 'none' }}
         >
-          <StatusBar />
+          <StatusBar theme={theme} onToggleTheme={toggleTheme} />
 
           <XmbNav
             categories={categories}

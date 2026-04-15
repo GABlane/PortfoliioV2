@@ -32,3 +32,5 @@ export interface NavigationState {
 }
 
 export type ViewportMode = 'shell' | 'screen';
+
+export type Theme = 'dark' | 'light';

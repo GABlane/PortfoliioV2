@@ -3,9 +3,10 @@
   display: flex;
   flex-direction: column;
   padding-left: clamp(20px, 3vw, 48px);
-  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 1px solid var(--border-faint);
   overflow: hidden;
   min-width: 0;
+  transition: border-color 0.3s ease;
 }
 
 .content {
@@ -32,25 +33,28 @@
   font-family: var(--font-ui);
   font-size: clamp(20px, 2.4vw, 32px);
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary);
   line-height: 1.15;
   letter-spacing: -0.02em;
+  transition: color 0.3s ease;
 }
 
 .subtitle {
   font-family: var(--font-ui);
   font-size: clamp(12px, 1.1vw, 15px);
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-muted);
   letter-spacing: 0.04em;
+  transition: color 0.3s ease;
 }
 
 /* Divider */
 .divider {
   width: 40px;
   height: 1px;
-  background: linear-gradient(90deg, var(--xmb-accent, #4a90d9), transparent);
+  background: linear-gradient(90deg, var(--xmb-accent), transparent);
   flex-shrink: 0;
+  transition: background 0.3s ease;
 }
 
 /* Description */
@@ -58,9 +62,10 @@
   font-family: var(--font-ui);
   font-size: clamp(13px, 1.15vw, 15.5px);
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-tertiary);
   line-height: 1.7;
   flex-shrink: 0;
+  transition: color 0.3s ease;
 }
 
 /* Tag pills */
@@ -74,19 +79,19 @@
 .tag {
   font-family: var(--font-mono);
   font-size: clamp(9px, 0.75vw, 11px);
-  color: rgba(74, 144, 217, 0.85);
+  color: var(--accent-tag-text);
   letter-spacing: 0.04em;
   padding: 4px 10px;
-  background: rgba(74, 144, 217, 0.08);
-  border: 1px solid rgba(74, 144, 217, 0.14);
+  background: var(--accent-tag-bg);
+  border: 1px solid var(--accent-tag-border);
   border-radius: 100px;
   white-space: nowrap;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .tag:hover {
-  background: rgba(74, 144, 217, 0.14);
-  border-color: rgba(74, 144, 217, 0.25);
+  background: var(--accent-tag-bg-hover);
+  border-color: var(--accent-tag-border-hover);
 }
 
 /* CTA button */
@@ -99,23 +104,23 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--xmb-accent, #4a90d9);
+  color: var(--accent-cta-text);
   text-decoration: none;
   padding: 8px 16px;
-  border: 1px solid rgba(74, 144, 217, 0.25);
+  border: 1px solid var(--accent-cta-border);
   border-radius: 6px;
-  background: rgba(74, 144, 217, 0.06);
+  background: var(--accent-cta-bg);
   width: fit-content;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
   flex-shrink: 0;
   margin-top: auto;
 }
 
 .cta:hover,
 .cta:focus-visible {
-  color: #a8d0f0;
-  background: rgba(74, 144, 217, 0.14);
-  border-color: rgba(74, 144, 217, 0.45);
+  color: var(--accent-cta-text-hover);
+  background: var(--accent-cta-bg-hover);
+  border-color: var(--accent-cta-border-hover);
   outline: none;
 }
 
