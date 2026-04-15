@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { PortfolioItem } from '@/types/portfolio';
 import ItemIcon from '@/components/ItemIcon/ItemIcon';
@@ -13,10 +14,24 @@ interface Props {
 }
 
 export default function CategoryList({ items, activeItemId, categoryId, onSelect }: Props) {
+  const ulRef = useRef<HTMLUListElement>(null);
+  const [canScrollDown, setCanScrollDown] = useState(false);
+
+  useEffect(() => {
+    const el = ulRef.current;
+    if (!el) return;
+    const check = () => setCanScrollDown(el.scrollHeight > el.clientHeight + 4);
+    check();
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [items]);
+
   return (
     <div className={styles.list} role="listbox" aria-label="Items">
       <AnimatePresence mode="wait">
         <motion.ul
+          ref={ulRef}
           key={categoryId}
           className={styles.ul}
           initial={{ opacity: 0, y: 8 }}
@@ -62,6 +77,21 @@ export default function CategoryList({ items, activeItemId, categoryId, onSelect
             );
           })}
         </motion.ul>
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {canScrollDown && (
+          <motion.div
+            className={styles.scrollHint}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            aria-hidden="true"
+          >
+            ↓
+          </motion.div>
+        )}
       </AnimatePresence>
     </div>
   );

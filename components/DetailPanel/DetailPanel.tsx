@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import type { PortfolioItem } from '@/types/portfolio';
+import { useNavSound } from '@/hooks/useNavSound';
 import styles from './DetailPanel.module.css';
 
 interface Props {
@@ -9,6 +10,8 @@ interface Props {
 }
 
 export default function DetailPanel({ item }: Props) {
+  const { playConfirm } = useNavSound();
+
   return (
     <div className={styles.panel}>
       <AnimatePresence mode="wait">
@@ -36,6 +39,7 @@ export default function DetailPanel({ item }: Props) {
               target="_blank"
               rel="noopener noreferrer"
               tabIndex={0}
+              onClick={playConfirm}
             >
               {item.ctaLabel} →
             </a>

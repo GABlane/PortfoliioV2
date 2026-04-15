@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigation } from '@/hooks/useNavigation';
+import { useNavSound } from '@/hooks/useNavSound';
 import { categories } from '@/data/content';
 import ScreenViewport from '@/components/ScreenViewport/ScreenViewport';
 import WaveBackground from '@/components/WaveBackground/WaveBackground';
@@ -16,6 +17,7 @@ type BootState = 'loading' | 'intro' | 'done';
 
 export default function Home() {
   const nav = useNavigation(categories);
+  const { playConfirm } = useNavSound();
   const containerRef = useRef<HTMLDivElement>(null);
   const [bootState, setBootState] = useState<BootState>('loading');
 
@@ -42,11 +44,19 @@ export default function Home() {
         case 'ArrowRight': e.preventDefault(); nav.navigateRight(); break;
         case 'ArrowUp':    e.preventDefault(); nav.navigateUp();    break;
         case 'ArrowDown':  e.preventDefault(); nav.navigateDown();  break;
+        case 'Enter': {
+          const { ctaHref } = nav.activeItem;
+          if (ctaHref) {
+            playConfirm();
+            window.open(ctaHref, '_blank', 'noopener,noreferrer');
+          }
+          break;
+        }
       }
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [bootState, nav]);
+  }, [bootState, nav, playConfirm]);
 
   const handleIntroComplete = useCallback(() => {
     sessionStorage.setItem('psp-intro-seen', '1');

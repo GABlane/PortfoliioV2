@@ -3,9 +3,10 @@
 import { useRef, useCallback, useEffect } from 'react';
 
 export function useNavSound() {
-  const ctxRef    = useRef<AudioContext | null>(null);
-  const bufferRef = useRef<AudioBuffer | null>(null);
-  const loadedRef = useRef(false);
+  const ctxRef      = useRef<AudioContext | null>(null);
+  const navBufRef   = useRef<AudioBuffer | null>(null);
+  const confBufRef  = useRef<AudioBuffer | null>(null);
+  const loadedRef   = useRef(false);
 
   const getCtx = useCallback(() => {
     if (!ctxRef.current) {
@@ -22,19 +23,24 @@ export function useNavSound() {
     loadedRef.current = true;
 
     const ctx = getCtx();
+
     fetch('/sounds/deck_ui_navigation.wav')
       .then((r) => r.arrayBuffer())
       .then((ab) => ctx.decodeAudioData(ab))
-      .then((buf) => { bufferRef.current = buf; })
+      .then((buf) => { navBufRef.current = buf; })
+      .catch(() => {});
+
+    fetch('/sounds/confirmation_positive.wav')
+      .then((r) => r.arrayBuffer())
+      .then((ab) => ctx.decodeAudioData(ab))
+      .then((buf) => { confBufRef.current = buf; })
       .catch(() => {});
   }, [getCtx]);
 
-  const play = useCallback((volume = 1) => {
+  const playBuf = useCallback((buf: AudioBuffer | null, volume: number) => {
+    if (!buf) return;
     try {
-      const ctx = getCtx();
-      const buf = bufferRef.current;
-      if (!buf) return;
-
+      const ctx    = getCtx();
       const source = ctx.createBufferSource();
       const gain   = ctx.createGain();
       source.buffer = buf;
@@ -47,9 +53,10 @@ export function useNavSound() {
     }
   }, [getCtx]);
 
-  const playMove   = useCallback(() => play(0.6), [play]);
-  const playTab    = useCallback(() => play(0.7), [play]);
-  const playSelect = useCallback(() => play(0.8), [play]);
+  const playMove    = useCallback(() => playBuf(navBufRef.current,  0.6), [playBuf]);
+  const playTab     = useCallback(() => playBuf(navBufRef.current,  0.7), [playBuf]);
+  const playSelect  = useCallback(() => playBuf(navBufRef.current,  0.8), [playBuf]);
+  const playConfirm = useCallback(() => playBuf(confBufRef.current, 0.9), [playBuf]);
 
-  return { playMove, playTab, playSelect };
+  return { playMove, playTab, playSelect, playConfirm };
 }
