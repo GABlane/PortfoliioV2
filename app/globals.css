@@ -71,6 +71,13 @@
   --preview-grid: rgba(255, 255, 255, 0.02);
   --preview-title: rgba(255, 255, 255, 0.35);
   --preview-subtitle: rgba(255, 255, 255, 0.2);
+  --tetris-p1: #54d6ff;
+  --tetris-p2: #ffd65f;
+  --tetris-p3: #a882ff;
+  --tetris-p4: #50d7a8;
+  --tetris-p5: #ff7d8f;
+  --tetris-p6: #7ab2ff;
+  --tetris-p7: #ff9d56;
 }
 
 [data-theme='light'] {
@@ -125,6 +132,13 @@
   --preview-grid: rgba(11, 24, 48, 0.06);
   --preview-title: rgba(12, 18, 32, 0.52);
   --preview-subtitle: rgba(12, 18, 32, 0.36);
+  --tetris-p1: #2f9bc7;
+  --tetris-p2: #c6982f;
+  --tetris-p3: #7552c5;
+  --tetris-p4: #2ca277;
+  --tetris-p5: #cc566d;
+  --tetris-p6: #4c78c7;
+  --tetris-p7: #cc7b3d;
 }
 
 html {

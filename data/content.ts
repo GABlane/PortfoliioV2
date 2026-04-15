@@ -102,6 +102,46 @@ export const categories: PortfolioCategory[] = [
     ],
   },
   {
+    id: 'games',
+    label: 'Games',
+    iconType: 'games',
+    items: [
+      {
+        id: 'tic-tac-toe',
+        kind: 'game',
+        gameId: 'tic-tac-toe',
+        icon: 'gamepad' as const,
+        title: 'Tic-Tac-Toe',
+        subtitle: 'Classic 3x3 Strategy',
+        description:
+          'Play as X against a lightweight AI opponent. Use arrow keys and Enter to place marks, or tap cells directly on touch devices.',
+        tags: ['Keyboard + Touch', 'Best of 1'],
+      },
+      {
+        id: 'tetris',
+        kind: 'game',
+        gameId: 'tetris',
+        icon: 'gamepad' as const,
+        title: 'Tetris',
+        subtitle: '10x20 Block Stacker',
+        description:
+          'Arrange falling tetrominoes to clear lines before the stack reaches the top. Arrow keys move and rotate pieces, with on-screen controls for touch.',
+        tags: ['Line Clear', 'Session Score'],
+      },
+      {
+        id: 'pong',
+        kind: 'game',
+        gameId: 'pong',
+        icon: 'gamepad' as const,
+        title: 'Pong',
+        subtitle: 'Single Player vs AI',
+        description:
+          'Control the left paddle against an AI opponent and race to 11 points. Use arrow keys or touch controls to keep the ball in play.',
+        tags: ['First to 11', 'Arcade'],
+      },
+    ],
+  },
+  {
     id: 'skills',
     label: 'Skills',
     iconType: 'skills',

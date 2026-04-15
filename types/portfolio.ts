@@ -11,6 +11,8 @@ export interface PortfolioItem {
   subtitle: string;
   description: string;
   icon?: ItemIconType;
+  kind?: 'content' | 'link' | 'game';
+  gameId?: GameId;
   meta?: string;
   tags?: string[];
   image?: string;
@@ -21,7 +23,7 @@ export interface PortfolioItem {
 export interface PortfolioCategory {
   id: string;
   label: string;
-  iconType: 'profile' | 'projects' | 'skills' | 'experience' | 'contact';
+  iconType: 'profile' | 'projects' | 'games' | 'skills' | 'experience' | 'contact';
   items: PortfolioItem[];
 }
 
@@ -34,3 +36,5 @@ export interface NavigationState {
 export type ViewportMode = 'shell' | 'screen';
 
 export type Theme = 'dark' | 'light';
+
+export type GameId = 'tic-tac-toe' | 'tetris' | 'pong';

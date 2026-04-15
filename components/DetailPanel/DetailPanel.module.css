@@ -9,6 +9,11 @@
   transition: border-color 0.3s ease;
 }
 
+.panelGame {
+  padding-left: 0;
+  border-left: none;
+}
+
 .content {
   display: flex;
   flex-direction: column;
@@ -16,6 +21,10 @@
   height: 100%;
   overflow-y: auto;
   scrollbar-width: none;
+}
+
+.contentGame {
+  gap: 10px;
 }
 
 .content::-webkit-scrollbar {
@@ -66,6 +75,53 @@
   line-height: 1.7;
   flex-shrink: 0;
   transition: color 0.3s ease;
+}
+
+.gameActions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.gameBtn {
+  border: 1px solid var(--kbd-border);
+  background: var(--kbd-bg);
+  color: var(--kbd-text);
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.gameBtn:hover,
+.gameBtn:focus-visible {
+  border-color: var(--accent-cta-border-hover);
+  color: var(--text-secondary);
+  outline: none;
+}
+
+.gameBtn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.gameBtnPrimary {
+  border-color: var(--accent-cta-border);
+  background: var(--accent-cta-bg);
+  color: var(--accent-cta-text);
+}
+
+.gameHint {
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 0.75vw, 11px);
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
 }
 
 /* Tag pills */

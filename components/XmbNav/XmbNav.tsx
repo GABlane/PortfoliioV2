@@ -27,6 +27,15 @@ function CategoryIcon({ type }: { type: PortfolioCategory['iconType'] }) {
         <rect x="13" y="13" width="8" height="8" rx="1.5" opacity="0.6" />
       </svg>
     ),
+    games: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="8" width="20" height="10" rx="4" />
+        <line x1="8" y1="13" x2="12" y2="13" />
+        <line x1="10" y1="11" x2="10" y2="15" />
+        <circle cx="16.5" cy="12" r="1.1" fill="currentColor" stroke="none" />
+        <circle cx="18.8" cy="14" r="1.1" fill="currentColor" stroke="none" />
+      </svg>
+    ),
     skills: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <rect x="4" y="4" width="16" height="16" rx="2" />

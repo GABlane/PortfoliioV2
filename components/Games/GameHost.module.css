@@ -1,0 +1,256 @@
+.host {
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-item-hover);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 310px;
+}
+
+.surface {
+  position: relative;
+  border: 1px solid var(--border-faint);
+  background: var(--bg-viewport);
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 0;
+  flex: 1;
+}
+
+.status {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.touchControls {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.touchRow {
+  display: flex;
+  gap: 8px;
+}
+
+.touchBtn {
+  border: 1px solid var(--kbd-border);
+  background: var(--kbd-bg);
+  color: var(--kbd-text);
+  border-radius: 6px;
+  padding: 7px 10px;
+  min-width: 44px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.touchBtn:active {
+  transform: scale(0.97);
+}
+
+/* TicTacToe */
+.tttGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+  padding: 12px;
+}
+
+.tttCell {
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-item-active);
+  border-radius: 8px;
+  min-height: 86px;
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: 29px;
+  font-weight: 600;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.tttCellActive {
+  border-color: var(--accent-cta-border-hover);
+  box-shadow: 0 0 0 1px var(--accent-cta-border);
+}
+
+.tttCell:disabled {
+  cursor: default;
+  opacity: 0.9;
+}
+
+.tttMarkX {
+  color: var(--accent-base);
+}
+
+.tttMarkO {
+  color: var(--text-secondary);
+}
+
+/* Tetris */
+.tetrisWrap {
+  display: flex;
+  gap: 16px;
+  padding: 10px;
+  align-items: flex-start;
+  height: 100%;
+}
+
+.tetrisBoard {
+  width: clamp(140px, 24vh, 240px);
+  aspect-ratio: 1 / 2;
+  display: grid;
+  grid-template-rows: repeat(20, 1fr);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-viewport);
+  flex-shrink: 0;
+}
+
+.tetrisRow {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+}
+
+.tetrisCell {
+  border: 1px solid var(--border-faint);
+  min-width: 0;
+}
+
+.p0 { background: transparent; }
+.p1 { background: var(--tetris-p1); }
+.p2 { background: var(--tetris-p2); }
+.p3 { background: var(--tetris-p3); }
+.p4 { background: var(--tetris-p4); }
+.p5 { background: var(--tetris-p5); }
+.p6 { background: var(--tetris-p6); }
+.p7 { background: var(--tetris-p7); }
+
+.tetrisMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.statPill {
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-item-active);
+  border-radius: 8px;
+  padding: 6px 8px;
+  min-width: 86px;
+}
+
+.statLabel {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.statValue {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* Pong */
+.pongArena {
+  position: relative;
+  height: clamp(250px, 42vh, 340px);
+  margin: 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--bg-viewport), var(--bg-item-hover));
+}
+
+.pongNet {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  margin-left: -1px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--separator) 0,
+    var(--separator) 8px,
+    transparent 8px,
+    transparent 14px
+  );
+  opacity: 0.7;
+}
+
+.pongPaddle {
+  position: absolute;
+  border-radius: 5px;
+  background: var(--text-secondary);
+}
+
+.pongBall {
+  position: absolute;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: var(--accent-base);
+  box-shadow: 0 0 8px var(--accent-glow-soft);
+}
+
+.pongScore {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.pongOverlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  background: var(--bg-boot-overlay);
+}
+
+@media (max-width: 820px) {
+  .tetrisWrap {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .tetrisBoard {
+    width: clamp(120px, 34vw, 180px);
+  }
+
+  .tttCell {
+    min-height: 72px;
+  }
+
+  .pongArena {
+    height: 240px;
+  }
+}
+
+@media (pointer: coarse), (hover: none) {
+  .touchControls {
+    display: flex;
+  }
+}
