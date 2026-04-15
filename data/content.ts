@@ -8,6 +8,7 @@ export const categories: PortfolioCategory[] = [
     items: [
       {
         id: 'about',
+        icon: 'user' as const,
         title: 'About Me',
         subtitle: 'Aspiring Software Engineer',
         description:
@@ -16,6 +17,7 @@ export const categories: PortfolioCategory[] = [
       },
       {
         id: 'philosophy',
+        icon: 'lightbulb' as const,
         title: 'Philosophy',
         subtitle: 'How I Work',
         description:
@@ -23,6 +25,7 @@ export const categories: PortfolioCategory[] = [
       },
       {
         id: 'achievements',
+        icon: 'trophy' as const,
         title: 'Achievements',
         subtitle: 'Honors & Recognition',
         description:
@@ -38,6 +41,7 @@ export const categories: PortfolioCategory[] = [
     items: [
       {
         id: 'motomedic',
+        icon: 'store' as const,
         title: 'MotoMedic IMS',
         subtitle: 'Inventory & POS System',
         description:
@@ -48,6 +52,7 @@ export const categories: PortfolioCategory[] = [
       },
       {
         id: 'smartvault',
+        icon: 'shield' as const,
         title: 'SmartVault IoT',
         subtitle: 'IoT Ecosystem',
         description:
@@ -58,6 +63,7 @@ export const categories: PortfolioCategory[] = [
       },
       {
         id: 'gearfalcon',
+        icon: 'cart' as const,
         title: 'GearFalcon',
         subtitle: 'E-Commerce Platform',
         description:
@@ -68,6 +74,7 @@ export const categories: PortfolioCategory[] = [
       },
       {
         id: 'java-game',
+        icon: 'gamepad' as const,
         title: 'OOP Case Study Game',
         subtitle: 'Desktop Game',
         description:
@@ -78,6 +85,7 @@ export const categories: PortfolioCategory[] = [
       },
       {
         id: 'bagyoalerto',
+        icon: 'alert' as const,
         title: 'BagyoAlerto',
         subtitle: 'Hackathon Project',
         description:
@@ -95,6 +103,7 @@ export const categories: PortfolioCategory[] = [
     items: [
       {
         id: 'languages',
+        icon: 'code' as const,
         title: 'Languages',
         subtitle: 'TypeScript · JavaScript · Java · PHP · Kotlin · C#',
         description:
@@ -102,6 +111,7 @@ export const categories: PortfolioCategory[] = [
       },
       {
         id: 'frontend',
+        icon: 'monitor' as const,
         title: 'Frontend',
         subtitle: 'React · Next.js · React Native · Redux · Vite · Tailwind',
         description:
@@ -109,6 +119,7 @@ export const categories: PortfolioCategory[] = [
       },
       {
         id: 'backend',
+        icon: 'server' as const,
         title: 'Backend',
         subtitle: 'Node.js · NestJS · Express · FastAPI · Laravel',
         description:
@@ -116,6 +127,7 @@ export const categories: PortfolioCategory[] = [
       },
       {
         id: 'database',
+        icon: 'database' as const,
         title: 'Database',
         subtitle: 'PostgreSQL · MySQL · MongoDB · SQLite · Firebase',
         description:
@@ -123,6 +135,7 @@ export const categories: PortfolioCategory[] = [
       },
       {
         id: 'devops',
+        icon: 'wrench' as const,
         title: 'DevOps & Tools',
         subtitle: 'Git · Docker · Vercel · Postman · Swagger · Arduino',
         description:
@@ -137,6 +150,7 @@ export const categories: PortfolioCategory[] = [
     items: [
       {
         id: 'ucc',
+        icon: 'graduation' as const,
         title: 'BS Computer Science',
         subtitle: 'University of Caloocan City · 2023–Present',
         description:
@@ -145,6 +159,7 @@ export const categories: PortfolioCategory[] = [
       },
       {
         id: 'shs',
+        icon: 'book' as const,
         title: 'Senior High School',
         subtitle: 'System Plus Computer College · 2020–2023',
         description:
@@ -153,6 +168,7 @@ export const categories: PortfolioCategory[] = [
       },
       {
         id: 'bscs-rep',
+        icon: 'flag' as const,
         title: 'BSCS Representative',
         subtitle: 'Dept. of Liberal Arts & Sciences · 2023–2025',
         description:
@@ -161,6 +177,7 @@ export const categories: PortfolioCategory[] = [
       },
       {
         id: 'orgs',
+        icon: 'users' as const,
         title: 'Organizations',
         subtitle: 'MIS · ACES · 2023–2026',
         description:
@@ -176,6 +193,7 @@ export const categories: PortfolioCategory[] = [
     items: [
       {
         id: 'email',
+        icon: 'mail' as const,
         title: 'Email',
         subtitle: 'Direct Line',
         description: 'johngabrielleofiangga@gmail.com',
@@ -184,6 +202,7 @@ export const categories: PortfolioCategory[] = [
       },
       {
         id: 'github',
+        icon: 'github' as const,
         title: 'GitHub',
         subtitle: 'Projects & Source Code',
         description:
@@ -193,6 +212,7 @@ export const categories: PortfolioCategory[] = [
       },
       {
         id: 'linkedin',
+        icon: 'linkedin' as const,
         title: 'LinkedIn',
         subtitle: 'Professional Network',
         description:
@@ -202,6 +222,7 @@ export const categories: PortfolioCategory[] = [
       },
       {
         id: 'phone',
+        icon: 'phone' as const,
         title: 'Phone',
         subtitle: 'Mobile · Philippines',
         description: '+63 995-726-9441',

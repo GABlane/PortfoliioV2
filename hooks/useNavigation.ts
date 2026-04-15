@@ -2,8 +2,10 @@
 
 import { useState, useCallback, useRef } from 'react';
 import type { NavigationState, PortfolioCategory } from '@/types/portfolio';
+import { useNavSound } from './useNavSound';
 
 export function useNavigation(categories: PortfolioCategory[]) {
+  const { playMove, playTab, playSelect } = useNavSound();
   const [state, setState] = useState<NavigationState>({
     activeCategoryId: categories[0].id,
     activeItemId: categories[0].items[0].id,
@@ -31,45 +33,50 @@ export function useNavigation(categories: PortfolioCategory[]) {
   const navigateLeft = useCallback(() => {
     if (activeCategoryIndex <= 0) return;
     const next = categories[activeCategoryIndex - 1];
+    playTab();
     startTransition();
     setState({
       activeCategoryId: next.id,
       activeItemId: next.items[0].id,
       isTransitioning: true,
     });
-  }, [activeCategoryIndex, categories, startTransition]);
+  }, [activeCategoryIndex, categories, startTransition, playTab]);
 
   const navigateRight = useCallback(() => {
     if (activeCategoryIndex >= categories.length - 1) return;
     const next = categories[activeCategoryIndex + 1];
+    playTab();
     startTransition();
     setState({
       activeCategoryId: next.id,
       activeItemId: next.items[0].id,
       isTransitioning: true,
     });
-  }, [activeCategoryIndex, categories, startTransition]);
+  }, [activeCategoryIndex, categories, startTransition, playTab]);
 
   const navigateUp = useCallback(() => {
     if (activeItemIndex <= 0) return;
+    playMove();
     setState((s) => ({
       ...s,
       activeItemId: activeCategory.items[activeItemIndex - 1].id,
     }));
-  }, [activeItemIndex, activeCategory]);
+  }, [activeItemIndex, activeCategory, playMove]);
 
   const navigateDown = useCallback(() => {
     if (activeItemIndex >= activeCategory.items.length - 1) return;
+    playMove();
     setState((s) => ({
       ...s,
       activeItemId: activeCategory.items[activeItemIndex + 1].id,
     }));
-  }, [activeItemIndex, activeCategory]);
+  }, [activeItemIndex, activeCategory, playMove]);
 
   const selectCategory = useCallback(
     (categoryId: string) => {
       const target = categories.find((c) => c.id === categoryId);
       if (!target) return;
+      playSelect();
       startTransition();
       setState({
         activeCategoryId: target.id,
@@ -77,12 +84,13 @@ export function useNavigation(categories: PortfolioCategory[]) {
         isTransitioning: true,
       });
     },
-    [categories, startTransition],
+    [categories, startTransition, playSelect],
   );
 
   const selectItem = useCallback((itemId: string) => {
+    playSelect();
     setState((s) => ({ ...s, activeItemId: itemId }));
-  }, []);
+  }, [playSelect]);
 
   return {
     state,

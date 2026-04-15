@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import type { PortfolioItem } from '@/types/portfolio';
+import ItemIcon from '@/components/ItemIcon/ItemIcon';
 import styles from './CategoryList.module.css';
 
 interface Props {
@@ -36,8 +37,12 @@ export default function CategoryList({ items, activeItemId, categoryId, onSelect
                 transition={{ delay: i * 0.04, duration: 0.2 }}
                 onClick={() => onSelect(item.id)}
               >
-                <span className={styles.bullet}>
-                  {isActive ? '●' : '○'}
+                <span className={styles.iconWrap}>
+                  {item.icon ? (
+                    <ItemIcon type={item.icon} className={styles.icon} />
+                  ) : (
+                    <span className={styles.bullet}>{isActive ? '●' : '○'}</span>
+                  )}
                 </span>
                 <span className={styles.text}>
                   <span className={styles.title}>{item.title}</span>

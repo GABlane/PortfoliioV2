@@ -1,8 +1,16 @@
+export type ItemIconType =
+  | 'user' | 'lightbulb' | 'trophy'
+  | 'store' | 'shield' | 'cart' | 'gamepad' | 'alert'
+  | 'code' | 'monitor' | 'server' | 'database' | 'wrench'
+  | 'graduation' | 'book' | 'flag' | 'users'
+  | 'mail' | 'github' | 'linkedin' | 'phone';
+
 export interface PortfolioItem {
   id: string;
   title: string;
   subtitle: string;
   description: string;
+  icon?: ItemIconType;
   meta?: string;
   ctaLabel?: string;
   ctaHref?: string;
