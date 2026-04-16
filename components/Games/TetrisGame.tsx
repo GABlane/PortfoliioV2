@@ -120,9 +120,8 @@ export default function TetrisGame({ running, restartToken, className }: Props) 
   }, []);
 
   useEffect(() => {
-    if (!running) return;
     resetGame();
-  }, [running, restartToken, resetGame]);
+  }, [restartToken, resetGame]);
 
   const lockPiece = useCallback((lockedPiece: ActivePiece) => {
     const merged = merge(boardRef.current, lockedPiece);

@@ -83,9 +83,8 @@ export default function TicTacToeGame({ running, restartToken, className }: Prop
   }, []);
 
   useEffect(() => {
-    if (!running) return;
     resetRound();
-  }, [running, restartToken, resetRound]);
+  }, [restartToken, resetRound]);
 
   useEffect(() => {
     return () => {

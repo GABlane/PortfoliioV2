@@ -36,7 +36,6 @@ const PADDLE_HEIGHT_PCT = (PADDLE_HEIGHT / FIELD_HEIGHT) * 100;
 const LEFT_PADDLE_LEFT_PCT = (LEFT_PADDLE_X / FIELD_WIDTH) * 100;
 const RIGHT_PADDLE_LEFT_PCT = (RIGHT_PADDLE_X / FIELD_WIDTH) * 100;
 const BALL_WIDTH_PCT = (BALL_SIZE / FIELD_WIDTH) * 100;
-const BALL_HEIGHT_PCT = (BALL_SIZE / FIELD_HEIGHT) * 100;
 
 function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
@@ -88,6 +87,11 @@ export default function PongGame({ running, restartToken, className }: Props) {
     snapshotRef.current = next;
     setSnapshot(next);
   }, []);
+
+  useEffect(() => {
+    restartMatch();
+    prevTimeRef.current = 0;
+  }, [restartToken, restartMatch]);
 
   const tick = useCallback((timestamp: number) => {
     const prev = prevTimeRef.current || timestamp;
@@ -185,9 +189,6 @@ export default function PongGame({ running, restartToken, className }: Props) {
   useEffect(() => {
     if (!running) return;
 
-    restartMatch();
-    prevTimeRef.current = 0;
-
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'ArrowUp') {
         event.preventDefault();
@@ -217,7 +218,7 @@ export default function PongGame({ running, restartToken, className }: Props) {
       window.removeEventListener('keydown', onKeyDown);
       window.removeEventListener('keyup', onKeyUp);
     };
-  }, [running, restartToken, restartMatch, tick]);
+  }, [running, tick]);
 
   const status = useMemo(() => {
     if (snapshot.winner === 'PLAYER') return 'You win the match.';
@@ -260,7 +261,6 @@ export default function PongGame({ running, restartToken, className }: Props) {
               left: `${(snapshot.ballX / FIELD_WIDTH) * 100}%`,
               top: `${(snapshot.ballY / FIELD_HEIGHT) * 100}%`,
               width: `${BALL_WIDTH_PCT}%`,
-              height: `${BALL_HEIGHT_PCT}%`,
             }}
           />
 
