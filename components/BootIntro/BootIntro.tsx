@@ -3,13 +3,15 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePspChime } from '@/hooks/usePspChime';
+import type { IntroWavePhase } from '@/types/portfolio';
 import styles from './BootIntro.module.css';
 
 interface Props {
   onComplete: () => void;
+  onWavePhaseChange?: (phase: IntroWavePhase) => void;
 }
 
-export default function BootIntro({ onComplete }: Props) {
+export default function BootIntro({ onComplete, onWavePhaseChange }: Props) {
   const [started, setStarted]       = useState(false);
   const [textVisible, setTextVisible] = useState(false);
   const [wavesVisible, setWavesVisible] = useState(false);
@@ -17,37 +19,48 @@ export default function BootIntro({ onComplete }: Props) {
   // Keep a stable ref so the timeout closure always calls the latest onComplete
   const onCompleteRef = useRef(onComplete);
   useEffect(() => { onCompleteRef.current = onComplete; });
+  const onWavePhaseChangeRef = useRef(onWavePhaseChange);
+  useEffect(() => { onWavePhaseChangeRef.current = onWavePhaseChange; }, [onWavePhaseChange]);
+
+  const emitWavePhase = useCallback((phase: IntroWavePhase) => {
+    onWavePhaseChangeRef.current?.(phase);
+  }, []);
 
   const startBoot = useCallback(() => {
     if (started) return;
     setStarted(true);
+    emitWavePhase('ramp');
     playChime();
-  }, [started, playChime]);
+  }, [started, playChime, emitWavePhase]);
 
   // Trigger on any key or click while in standby
   useEffect(() => {
     if (started) return;
+    emitWavePhase('standby');
     window.addEventListener('keydown', startBoot);
     window.addEventListener('click',   startBoot);
     return () => {
       window.removeEventListener('keydown', startBoot);
       window.removeEventListener('click',   startBoot);
     };
-  }, [started, startBoot]);
+  }, [started, startBoot, emitWavePhase]);
 
   // Sequence — runs once when started flips true.
   // Single effect so phase sub-transitions never cancel each other's timers.
   useEffect(() => {
     if (!started) return;
     const t1 = setTimeout(() => setTextVisible(true),   200);
-    const t2 = setTimeout(() => setWavesVisible(true),  1600);
+    const t2 = setTimeout(() => {
+      setWavesVisible(true);
+      emitWavePhase('reveal');
+    }, 1600);
     const t3 = setTimeout(() => setTextVisible(false),  3200);
     const t4 = setTimeout(() => onCompleteRef.current(), 4200);
     return () => [t1, t2, t3, t4].forEach(clearTimeout);
-  }, [started]); // ← only `started` — never re-runs mid-sequence
+  }, [started, emitWavePhase]); // ← only `started` path triggers the sequence
 
-  const overlayOpacity = !started ? 0.97 : wavesVisible ? 0.10 : 0.80;
-  const overlayDuration = wavesVisible ? 1.8 : 0.6;
+  const overlayOpacity = !started ? 0.95 : wavesVisible ? 0.18 : 0.74;
+  const overlayDuration = wavesVisible ? 1.24 : 0.52;
 
   return (
     <motion.div

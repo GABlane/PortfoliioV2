@@ -40,3 +40,7 @@ export type Theme = 'dark' | 'light';
 export type GameId = 'tic-tac-toe' | 'tetris' | 'pong';
 
 export type GamePhase = 'idle' | 'starting' | 'running' | 'paused';
+
+export type BootWavePhase = 'idle' | 'standby' | 'ramp' | 'reveal';
+
+export type IntroWavePhase = Exclude<BootWavePhase, 'idle'>;

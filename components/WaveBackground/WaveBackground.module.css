@@ -4,6 +4,21 @@
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
+  --wave-layer-opacity: 1;
+  --wave-layer-scale: 1;
+  --wave-layer-y: 0%;
+  --wave-layer-saturate: 1;
+  --wave-shimmer-opacity: 1;
+  --wave-duration-1: 7s;
+  --wave-duration-2: 10s;
+  --wave-duration-3: 14s;
+  --wave-shimmer-duration: 18s;
+  --wave-drift-1: 4%;
+  --wave-drift-2: -5%;
+  --wave-drift-3: 3%;
+  --wave-scale-1: 1.04;
+  --wave-scale-2: 0.97;
+  --wave-scale-3: 1.06;
 }
 
 .baseGrad {
@@ -22,24 +37,43 @@
   left: -10%;
   width: 120%;
   height: 100%;
+  opacity: var(--wave-layer-opacity);
+  transform: translateY(var(--wave-layer-y)) scale(var(--wave-layer-scale));
+  filter: saturate(var(--wave-layer-saturate));
+  transition: opacity 0.6s ease, transform 0.8s ease, filter 0.8s ease;
+  will-change: transform, opacity;
 }
 
 .wave3 {
   fill: var(--wave-fill-3);
-  animation: waveSlide3 14s ease-in-out infinite alternate;
+  animation: waveSlide3 var(--wave-duration-3) ease-in-out infinite alternate;
   transition: fill 0.4s ease;
 }
 
 .wave2 {
   fill: var(--wave-fill-2);
-  animation: waveSlide2 10s ease-in-out infinite alternate;
+  animation: waveSlide2 var(--wave-duration-2) ease-in-out infinite alternate;
   transition: fill 0.4s ease;
 }
 
 .wave1 {
   fill: var(--wave-fill-1);
-  animation: waveSlide1 7s ease-in-out infinite alternate;
+  animation: waveSlide1 var(--wave-duration-1) ease-in-out infinite alternate;
   transition: fill 0.4s ease;
+}
+
+.bootSweep {
+  position: absolute;
+  inset: -10% -24%;
+  opacity: 0;
+  background: linear-gradient(
+    112deg,
+    transparent 18%,
+    var(--accent-glow-soft) 50%,
+    transparent 78%
+  );
+  transform: translateX(-28%) scale(1.12);
+  will-change: transform, opacity;
 }
 
 .shimmer {
@@ -53,26 +87,129 @@
     var(--wave-shimmer) 80%,
     transparent 100%
   );
-  animation: shimmerDrift 18s ease-in-out infinite;
-  transition: background 0.4s ease;
+  opacity: var(--wave-shimmer-opacity);
+  animation: shimmerDrift var(--wave-shimmer-duration) ease-in-out infinite;
+  transition: opacity 0.6s ease, background 0.4s ease;
 }
 
 @keyframes waveSlide1 {
   from { transform: translateX(0) scaleY(1); }
-  to   { transform: translateX(4%) scaleY(1.04); }
+  to   { transform: translateX(var(--wave-drift-1)) scaleY(var(--wave-scale-1)); }
 }
 
 @keyframes waveSlide2 {
   from { transform: translateX(0) scaleY(1); }
-  to   { transform: translateX(-5%) scaleY(0.97); }
+  to   { transform: translateX(var(--wave-drift-2)) scaleY(var(--wave-scale-2)); }
 }
 
 @keyframes waveSlide3 {
   from { transform: translateX(0) scaleY(1); }
-  to   { transform: translateX(3%) scaleY(1.06); }
+  to   { transform: translateX(var(--wave-drift-3)) scaleY(var(--wave-scale-3)); }
 }
 
 @keyframes shimmerDrift {
   0%, 100% { opacity: 1; transform: translateX(0); }
   50%       { opacity: 0.6; transform: translateX(2%); }
+}
+
+.root[data-boot-phase='standby'] {
+  --wave-layer-opacity: 0.72;
+  --wave-layer-scale: 0.992;
+  --wave-layer-y: 0.8%;
+  --wave-layer-saturate: 0.92;
+  --wave-shimmer-opacity: 0.48;
+  --wave-duration-1: 10s;
+  --wave-duration-2: 14s;
+  --wave-duration-3: 18s;
+  --wave-shimmer-duration: 24s;
+  --wave-drift-1: 2.3%;
+  --wave-drift-2: -2.9%;
+  --wave-drift-3: 2%;
+  --wave-scale-1: 1.02;
+  --wave-scale-2: 0.985;
+  --wave-scale-3: 1.03;
+}
+
+.root[data-boot-phase='ramp'] {
+  --wave-layer-opacity: 1;
+  --wave-layer-scale: 1.01;
+  --wave-layer-y: 0%;
+  --wave-layer-saturate: 1.08;
+  --wave-shimmer-opacity: 0.95;
+  --wave-duration-1: 7s;
+  --wave-duration-2: 10s;
+  --wave-duration-3: 14s;
+  --wave-shimmer-duration: 16s;
+}
+
+.root[data-boot-phase='ramp'] .waveLayer {
+  animation: bootWaveSwell 1.18s cubic-bezier(0.24, 0.64, 0.32, 1) 1 both;
+}
+
+.root[data-boot-phase='ramp'] .bootSweep {
+  animation: bootSweepPass 1.26s ease-out 1 both;
+}
+
+.root[data-boot-phase='reveal'] {
+  --wave-layer-opacity: 1;
+  --wave-layer-scale: 1;
+  --wave-layer-y: 0%;
+  --wave-layer-saturate: 1;
+  --wave-shimmer-opacity: 1;
+}
+
+.root[data-boot-phase='reveal'] .waveLayer {
+  animation: bootWaveSettle 0.92s ease-out 1 both;
+}
+
+@keyframes bootWaveSwell {
+  0% {
+    transform: translateY(1.6%) scale(0.985);
+  }
+  46% {
+    transform: translateY(-0.8%) scale(1.03);
+  }
+  100% {
+    transform: translateY(0%) scale(1.01);
+  }
+}
+
+@keyframes bootWaveSettle {
+  0% {
+    transform: translateY(-0.5%) scale(1.02);
+  }
+  100% {
+    transform: translateY(0%) scale(1);
+  }
+}
+
+@keyframes bootSweepPass {
+  0% {
+    opacity: 0;
+    transform: translateX(-30%) scale(1.14);
+  }
+  22% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(24%) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave1,
+  .wave2,
+  .wave3,
+  .shimmer,
+  .root[data-boot-phase='ramp'] .waveLayer,
+  .root[data-boot-phase='reveal'] .waveLayer {
+    animation: none;
+  }
+
+  .bootSweep,
+  .root[data-boot-phase='ramp'] .bootSweep {
+    display: none;
+    animation: none;
+  }
 }

@@ -6,7 +6,7 @@ import { useNavigation } from '@/hooks/useNavigation';
 import { useNavSound } from '@/hooks/useNavSound';
 import { useTheme } from '@/hooks/useTheme';
 import { categories } from '@/data/content';
-import type { GameId, GamePhase } from '@/types/portfolio';
+import type { BootWavePhase, GameId, GamePhase, IntroWavePhase } from '@/types/portfolio';
 import ScreenViewport from '@/components/ScreenViewport/ScreenViewport';
 import WaveBackground from '@/components/WaveBackground/WaveBackground';
 import XmbNav from '@/components/XmbNav/XmbNav';
@@ -26,6 +26,7 @@ export default function Home() {
   const prefersReducedMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const [bootState, setBootState] = useState<BootState>('loading');
+  const [bootWavePhase, setBootWavePhase] = useState<BootWavePhase>('idle');
   const [activeGameId, setActiveGameId] = useState<GameId | null>(null);
   const [gamePhase, setGamePhase] = useState<GamePhase>('idle');
   const [gameRestartToken, setGameRestartToken] = useState(0);
@@ -85,6 +86,14 @@ export default function Home() {
       setBootState('intro');
     }
   }, []);
+
+  useEffect(() => {
+    if (bootState === 'intro') {
+      setBootWavePhase('standby');
+      return;
+    }
+    setBootWavePhase('idle');
+  }, [bootState]);
 
   // Focus container for keyboard nav (only once boot is done)
   useEffect(() => {
@@ -185,7 +194,12 @@ export default function Home() {
 
   const handleIntroComplete = useCallback(() => {
     sessionStorage.setItem('psp-intro-seen', '1');
+    setBootWavePhase('idle');
     setBootState('done');
+  }, []);
+
+  const handleBootWavePhaseChange = useCallback((phase: IntroWavePhase) => {
+    setBootWavePhase(phase);
   }, []);
 
   return (
@@ -196,7 +210,7 @@ export default function Home() {
       aria-label="Portfolio — use arrow keys to navigate"
     >
       <ScreenViewport>
-        <WaveBackground />
+        <WaveBackground bootWavePhase={bootWavePhase} />
 
         <motion.div
           className={styles.xmbLayer}
@@ -424,7 +438,7 @@ export default function Home() {
 
         <AnimatePresence>
           {bootState === 'intro' && (
-            <BootIntro onComplete={handleIntroComplete} />
+            <BootIntro onComplete={handleIntroComplete} onWavePhaseChange={handleBootWavePhaseChange} />
           )}
         </AnimatePresence>
       </ScreenViewport>

@@ -1,8 +1,13 @@
 import styles from './WaveBackground.module.css';
+import type { BootWavePhase } from '@/types/portfolio';
 
-export default function WaveBackground() {
+interface Props {
+  bootWavePhase?: BootWavePhase;
+}
+
+export default function WaveBackground({ bootWavePhase = 'idle' }: Props) {
   return (
-    <div className={styles.root} aria-hidden="true">
+    <div className={styles.root} data-boot-phase={bootWavePhase} aria-hidden="true">
       <div className={styles.baseGrad} />
       <svg
         className={styles.waveLayer}
@@ -23,6 +28,7 @@ export default function WaveBackground() {
           d="M0,242 C140,218 300,258 460,235 C620,212 760,248 920,230 L920,272 L0,272 Z"
         />
       </svg>
+      <div className={styles.bootSweep} />
       <div className={styles.shimmer} />
     </div>
   );
