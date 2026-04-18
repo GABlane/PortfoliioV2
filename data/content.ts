@@ -136,8 +136,19 @@ export const categories: PortfolioCategory[] = [
         title: 'Pong',
         subtitle: 'Single Player vs AI',
         description:
-          'Control the left paddle against an AI opponent and race to 11 points. Use arrow keys or touch controls to keep the ball in play.',
-        tags: ['First to 11', 'Arcade'],
+          'Control the left paddle against an AI opponent and race to 11 points. Pick difficulty, watch the ball trail, and chase your longest streak.',
+        tags: ['First to 11', 'Arcade', 'Difficulty'],
+      },
+      {
+        id: 'snake',
+        kind: 'game',
+        gameId: 'snake',
+        icon: 'gamepad' as const,
+        title: 'Snake',
+        subtitle: 'Grow. Don\'t crash.',
+        description:
+          'Classic Snake on a 20x14 grid. Eat apples to grow, avoid walls and yourself. Arrow keys, WASD, or swipe on touch. Speed ramps with length.',
+        tags: ['Keyboard + Swipe', 'High Score'],
       },
     ],
   },

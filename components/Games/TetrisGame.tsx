@@ -2,6 +2,13 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './GameHost.module.css';
+import GameOverlay from './shared/GameOverlay';
+import Stat from './shared/Stat';
+import { useGameAudio } from './shared/useGameAudio';
+import { useGameStorage } from './shared/useGameStorage';
+import { useGamePause } from './shared/useGamePause';
+import { GAME_SOUNDS } from './shared/sounds';
+import { TETRIS } from './shared/constants';
 
 interface Props {
   running: boolean;
@@ -18,8 +25,11 @@ interface ActivePiece {
   y: number;
 }
 
-const BOARD_WIDTH = 10;
-const BOARD_HEIGHT = 20;
+interface HighScore {
+  score: number;
+  lines: number;
+  level: number;
+}
 
 const TETROMINOES: Array<{ id: number; shape: number[][] }> = [
   { id: 1, shape: [[1, 1, 1, 1]] },
@@ -32,6 +42,7 @@ const TETROMINOES: Array<{ id: number; shape: number[][] }> = [
 ];
 
 const PIECE_CLASSES = [styles.p0, styles.p1, styles.p2, styles.p3, styles.p4, styles.p5, styles.p6, styles.p7];
+const { BOARD_WIDTH, BOARD_HEIGHT, LINE_SCORES, LINES_PER_LEVEL, MIN_GRAVITY_MS, BASE_GRAVITY_MS, GRAVITY_STEP_MS, LINE_FLASH_MS } = TETRIS;
 
 function createEmptyBoard(): Board {
   return Array.from({ length: BOARD_HEIGHT }, () => Array(BOARD_WIDTH).fill(0));
@@ -58,7 +69,6 @@ function collides(board: Board, piece: ActivePiece, offsetX: number, offsetY: nu
       if (!shape[r][c]) continue;
       const nx = piece.x + c + offsetX;
       const ny = piece.y + r + offsetY;
-
       if (nx < 0 || nx >= BOARD_WIDTH || ny >= BOARD_HEIGHT) return true;
       if (ny >= 0 && board[ny][nx] !== 0) return true;
     }
@@ -81,134 +91,217 @@ function merge(board: Board, piece: ActivePiece): Board {
   return next;
 }
 
-function clearLines(board: Board): { board: Board; cleared: number } {
-  const keptRows = board.filter((row) => row.some((cell) => cell === 0));
-  const cleared = BOARD_HEIGHT - keptRows.length;
-  while (keptRows.length < BOARD_HEIGHT) {
-    keptRows.unshift(Array(BOARD_WIDTH).fill(0));
+function findFullRows(board: Board): number[] {
+  const rows: number[] = [];
+  for (let r = 0; r < BOARD_HEIGHT; r += 1) {
+    if (board[r].every((cell) => cell !== 0)) rows.push(r);
   }
-  return { board: keptRows, cleared };
+  return rows;
+}
+
+function removeRows(board: Board, rows: number[]): Board {
+  const rowSet = new Set(rows);
+  const kept = board.filter((_, index) => !rowSet.has(index));
+  while (kept.length < BOARD_HEIGHT) {
+    kept.unshift(Array(BOARD_WIDTH).fill(0));
+  }
+  return kept;
 }
 
 function rotateCW(shape: number[][]): number[][] {
   return shape[0].map((_, col) => shape.map((row) => row[col]).reverse());
 }
 
+function computeGhostY(board: Board, piece: ActivePiece): number {
+  let drop = 0;
+  while (!collides(board, piece, 0, drop + 1)) drop += 1;
+  return piece.y + drop;
+}
+
 export default function TetrisGame({ running, restartToken, className }: Props) {
   const [board, setBoard] = useState<Board>(() => createEmptyBoard());
   const [piece, setPiece] = useState<ActivePiece>(() => randomPiece());
+  const [nextPiece, setNextPiece] = useState<ActivePiece>(() => randomPiece());
   const [score, setScore] = useState(0);
   const [lines, setLines] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [clearingRows, setClearingRows] = useState<number[] | null>(null);
+  const [justBeatHighScore, setJustBeatHighScore] = useState(false);
+
+  const [highScore, setHighScore] = useGameStorage<HighScore>('tetris.best', { score: 0, lines: 0, level: 1 });
+
+  const { play, muted, toggleMuted } = useGameAudio({
+    lock: GAME_SOUNDS.lock,
+    move: GAME_SOUNDS.move,
+    rotate: GAME_SOUNDS.confirm,
+    lineClear: GAME_SOUNDS.lineClear,
+    tetrisClear: GAME_SOUNDS.tetrisClear,
+    gameOver: GAME_SOUNDS.gameOver,
+    pauseIn: GAME_SOUNDS.pauseIn,
+    pauseOut: GAME_SOUNDS.pauseOut,
+    highScore: GAME_SOUNDS.highScore,
+  });
+
+  const { paused, toggle: togglePause } = useGamePause({
+    running,
+    gameOver,
+    onPause: () => play('pauseIn', 0.6),
+    onResume: () => play('pauseOut', 0.6),
+  });
 
   const boardRef = useRef(board);
   const pieceRef = useRef(piece);
+  const nextPieceRef = useRef(nextPiece);
+  const clearingRef = useRef<number[] | null>(null);
+  const linesRef = useRef(0);
 
   useEffect(() => { boardRef.current = board; }, [board]);
   useEffect(() => { pieceRef.current = piece; }, [piece]);
+  useEffect(() => { nextPieceRef.current = nextPiece; }, [nextPiece]);
+  useEffect(() => { clearingRef.current = clearingRows; }, [clearingRows]);
+  useEffect(() => { linesRef.current = lines; }, [lines]);
+
+  const level = Math.floor(lines / LINES_PER_LEVEL) + 1;
 
   const resetGame = useCallback(() => {
     const freshBoard = createEmptyBoard();
     const freshPiece = randomPiece();
+    const freshNext = randomPiece();
     boardRef.current = freshBoard;
     pieceRef.current = freshPiece;
+    nextPieceRef.current = freshNext;
+    clearingRef.current = null;
+    linesRef.current = 0;
     setBoard(freshBoard);
     setPiece(freshPiece);
+    setNextPiece(freshNext);
     setScore(0);
     setLines(0);
     setGameOver(false);
+    setClearingRows(null);
+    setJustBeatHighScore(false);
   }, []);
 
   useEffect(() => {
     resetGame();
   }, [restartToken, resetGame]);
 
-  const lockPiece = useCallback((lockedPiece: ActivePiece) => {
-    const merged = merge(boardRef.current, lockedPiece);
-    const { board: nextBoard, cleared } = clearLines(merged);
-
-    boardRef.current = nextBoard;
-    setBoard(nextBoard);
-
-    if (cleared > 0) {
-      setLines((prev) => prev + cleared);
-      setScore((prev) => prev + cleared * 100);
-    }
-
-    const nextPiece = randomPiece();
-    if (collides(nextBoard, nextPiece, 0, 0)) {
+  const advancePiece = useCallback(() => {
+    const upcoming = nextPieceRef.current;
+    if (collides(boardRef.current, upcoming, 0, 0)) {
       setGameOver(true);
+      play('gameOver', 0.8);
       return;
     }
+    pieceRef.current = upcoming;
+    setPiece(upcoming);
+    const newNext = randomPiece();
+    nextPieceRef.current = newNext;
+    setNextPiece(newNext);
+  }, [play]);
 
-    pieceRef.current = nextPiece;
-    setPiece(nextPiece);
-  }, []);
+  const commitLineClear = useCallback(
+    (mergedBoard: Board, fullRows: number[]) => {
+      const cleared = fullRows.length;
+      const currentLevel = Math.floor(linesRef.current / LINES_PER_LEVEL) + 1;
+      const gain = LINE_SCORES[cleared] * currentLevel;
 
-  const dropPiece = useCallback((awardSoftDrop = false): boolean => {
-    if (!running || gameOver) return false;
-    const current = pieceRef.current;
+      setClearingRows(fullRows);
+      clearingRef.current = fullRows;
+      play(cleared === 4 ? 'tetrisClear' : 'lineClear', 0.7);
 
-    if (collides(boardRef.current, current, 0, 1)) {
-      lockPiece(current);
-      return false;
-    }
+      window.setTimeout(() => {
+        const cleanedBoard = removeRows(mergedBoard, fullRows);
+        boardRef.current = cleanedBoard;
+        setBoard(cleanedBoard);
+        setLines((prev) => prev + cleared);
+        setScore((prev) => prev + gain);
+        setClearingRows(null);
+        clearingRef.current = null;
+        advancePiece();
+      }, LINE_FLASH_MS);
+    },
+    [play, advancePiece],
+  );
 
-    const moved = { ...current, y: current.y + 1 };
-    pieceRef.current = moved;
-    setPiece(moved);
+  const lockPiece = useCallback(
+    (lockedPiece: ActivePiece) => {
+      const merged = merge(boardRef.current, lockedPiece);
+      boardRef.current = merged;
+      setBoard(merged);
+      play('lock', 0.5);
 
-    if (awardSoftDrop) {
-      setScore((prev) => prev + 1);
-    }
+      const fullRows = findFullRows(merged);
+      if (fullRows.length > 0) {
+        commitLineClear(merged, fullRows);
+      } else {
+        advancePiece();
+      }
+    },
+    [play, commitLineClear, advancePiece],
+  );
 
-    return true;
-  }, [running, gameOver, lockPiece]);
+  const dropPiece = useCallback(
+    (awardSoftDrop = false): boolean => {
+      if (!running || gameOver || paused || clearingRef.current) return false;
+      const current = pieceRef.current;
 
-  const moveHorizontal = useCallback((delta: number) => {
-    if (!running || gameOver) return;
-    const current = pieceRef.current;
-    if (collides(boardRef.current, current, delta, 0)) return;
-    const moved = { ...current, x: current.x + delta };
-    pieceRef.current = moved;
-    setPiece(moved);
-  }, [running, gameOver]);
+      if (collides(boardRef.current, current, 0, 1)) {
+        lockPiece(current);
+        return false;
+      }
+
+      const moved = { ...current, y: current.y + 1 };
+      pieceRef.current = moved;
+      setPiece(moved);
+
+      if (awardSoftDrop) setScore((prev) => prev + 1);
+      return true;
+    },
+    [running, gameOver, paused, lockPiece],
+  );
+
+  const moveHorizontal = useCallback(
+    (delta: number) => {
+      if (!running || gameOver || paused || clearingRef.current) return;
+      const current = pieceRef.current;
+      if (collides(boardRef.current, current, delta, 0)) return;
+      const moved = { ...current, x: current.x + delta };
+      pieceRef.current = moved;
+      setPiece(moved);
+      play('move', 0.3);
+    },
+    [running, gameOver, paused, play],
+  );
 
   const rotatePiece = useCallback(() => {
-    if (!running || gameOver) return;
+    if (!running || gameOver || paused || clearingRef.current) return;
     const current = pieceRef.current;
     const rotated = rotateCW(current.shape);
 
-    if (!collides(boardRef.current, current, 0, 0, rotated)) {
-      const updated = { ...current, shape: rotated };
-      pieceRef.current = updated;
-      setPiece(updated);
-      return;
-    }
-
-    if (!collides(boardRef.current, current, -1, 0, rotated)) {
-      const kicked = { ...current, x: current.x - 1, shape: rotated };
-      pieceRef.current = kicked;
-      setPiece(kicked);
-      return;
-    }
-
-    if (!collides(boardRef.current, current, 1, 0, rotated)) {
-      const kicked = { ...current, x: current.x + 1, shape: rotated };
-      pieceRef.current = kicked;
-      setPiece(kicked);
-    }
-  }, [running, gameOver]);
+    const tryKick = (offset: number) => {
+      if (!collides(boardRef.current, current, offset, 0, rotated)) {
+        const kicked = { ...current, x: current.x + offset, shape: rotated };
+        pieceRef.current = kicked;
+        setPiece(kicked);
+        play('rotate', 0.4);
+        return true;
+      }
+      return false;
+    };
+    if (tryKick(0)) return;
+    if (tryKick(-1)) return;
+    tryKick(1);
+  }, [running, gameOver, paused, play]);
 
   useEffect(() => {
-    if (!running || gameOver) return;
-    const speed = Math.max(130, 620 - lines * 14);
+    if (!running || gameOver || paused || clearingRows) return;
+    const speed = Math.max(MIN_GRAVITY_MS, BASE_GRAVITY_MS - (level - 1) * GRAVITY_STEP_MS);
     const timer = window.setInterval(() => {
       dropPiece(false);
     }, speed);
-
     return () => window.clearInterval(timer);
-  }, [running, gameOver, lines, dropPiece]);
+  }, [running, gameOver, paused, clearingRows, level, dropPiece]);
 
   useEffect(() => {
     if (!running) return;
@@ -216,16 +309,13 @@ export default function TetrisGame({ running, restartToken, className }: Props) 
     const onKeyDown = (event: KeyboardEvent) => {
       if (!['ArrowLeft', 'ArrowRight', 'ArrowDown', 'ArrowUp', ' '].includes(event.key)) return;
       event.preventDefault();
+      if (paused || gameOver || clearingRef.current) return;
 
-      if (event.key === 'ArrowLeft') {
-        moveHorizontal(-1);
-      } else if (event.key === 'ArrowRight') {
-        moveHorizontal(1);
-      } else if (event.key === 'ArrowDown') {
-        dropPiece(true);
-      } else if (event.key === 'ArrowUp') {
-        rotatePiece();
-      } else if (event.key === ' ') {
+      if (event.key === 'ArrowLeft') moveHorizontal(-1);
+      else if (event.key === 'ArrowRight') moveHorizontal(1);
+      else if (event.key === 'ArrowDown') dropPiece(true);
+      else if (event.key === 'ArrowUp') rotatePiece();
+      else if (event.key === ' ') {
         while (dropPiece(true)) {
           // hard drop until lock
         }
@@ -234,60 +324,123 @@ export default function TetrisGame({ running, restartToken, className }: Props) 
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [running, moveHorizontal, dropPiece, rotatePiece]);
+  }, [running, paused, gameOver, moveHorizontal, dropPiece, rotatePiece]);
+
+  useEffect(() => {
+    if (!gameOver) return;
+    if (score > highScore.score) {
+      setHighScore({ score, lines, level });
+      setJustBeatHighScore(true);
+      play('highScore', 0.8);
+    }
+  }, [gameOver, score, lines, level, highScore.score, setHighScore, play]);
 
   const renderedBoard = useMemo(() => {
     const next = board.map((row) => [...row]);
+    if (gameOver || clearingRows) return next;
 
-    if (!gameOver) {
-      for (let r = 0; r < piece.shape.length; r += 1) {
-        for (let c = 0; c < piece.shape[r].length; c += 1) {
-          if (!piece.shape[r][c]) continue;
-          const x = piece.x + c;
-          const y = piece.y + r;
-          if (y >= 0 && y < BOARD_HEIGHT && x >= 0 && x < BOARD_WIDTH) {
-            next[y][x] = piece.id;
-          }
+    const ghostY = computeGhostY(board, piece);
+    for (let r = 0; r < piece.shape.length; r += 1) {
+      for (let c = 0; c < piece.shape[r].length; c += 1) {
+        if (!piece.shape[r][c]) continue;
+        const x = piece.x + c;
+        const y = ghostY + r;
+        if (y >= 0 && y < BOARD_HEIGHT && x >= 0 && x < BOARD_WIDTH && next[y][x] === 0) {
+          next[y][x] = -piece.id;
         }
       }
     }
-
+    for (let r = 0; r < piece.shape.length; r += 1) {
+      for (let c = 0; c < piece.shape[r].length; c += 1) {
+        if (!piece.shape[r][c]) continue;
+        const x = piece.x + c;
+        const y = piece.y + r;
+        if (y >= 0 && y < BOARD_HEIGHT && x >= 0 && x < BOARD_WIDTH) {
+          next[y][x] = piece.id;
+        }
+      }
+    }
     return next;
-  }, [board, piece, gameOver]);
+  }, [board, piece, gameOver, clearingRows]);
 
-  const status = gameOver
-    ? 'Game over. Press Restart or R to begin again.'
-    : 'Arrow keys move, Up rotates, Space hard-drops.';
+  const nextPreview = useMemo(() => {
+    const grid = Array.from({ length: 2 }, () => Array(4).fill(0));
+    const shape = nextPiece.shape;
+    for (let r = 0; r < shape.length && r < 2; r += 1) {
+      for (let c = 0; c < shape[r].length && c < 4; c += 1) {
+        if (shape[r][c]) grid[r][c] = nextPiece.id;
+      }
+    }
+    return grid;
+  }, [nextPiece]);
+
+  const clearingRowSet = useMemo(() => new Set(clearingRows ?? []), [clearingRows]);
 
   return (
     <div className={`${styles.host} ${className ?? ''}`}>
-      <span className={styles.status}>{status}</span>
+      <div className={styles.difficultyRow}>
+        <span>Level {level}</span>
+        <button type="button" className={styles.difficultyBtn} onClick={togglePause} disabled={!running || gameOver}>
+          {paused ? 'Resume' : 'Pause'}
+        </button>
+        <button type="button" className={styles.audioToggle} onClick={toggleMuted}>
+          {muted ? 'Sound Off' : 'Sound On'}
+        </button>
+      </div>
+
       <div className={styles.surface}>
         <div className={styles.tetrisWrap}>
           <div className={styles.tetrisBoard}>
             {renderedBoard.map((row, rowIndex) => (
               <div key={rowIndex} className={styles.tetrisRow}>
-                {row.map((cell, cellIndex) => (
-                  <div
-                    key={`${rowIndex}-${cellIndex}`}
-                    className={`${styles.tetrisCell} ${PIECE_CLASSES[cell]}`}
-                  />
-                ))}
+                {row.map((cell, cellIndex) => {
+                  const isGhost = cell < 0;
+                  const pieceClass = PIECE_CLASSES[Math.abs(cell)];
+                  const cls = `${styles.tetrisCell} ${pieceClass} ${isGhost ? styles.tetrisGhost : ''} ${clearingRowSet.has(rowIndex) ? styles.tetrisFlash : ''}`;
+                  return <div key={`${rowIndex}-${cellIndex}`} className={cls} />;
+                })}
               </div>
             ))}
           </div>
 
           <div className={styles.tetrisMeta}>
-            <div className={styles.statPill}>
-              <span className={styles.statLabel}>Score</span>
-              <span className={styles.statValue}>{score}</span>
+            <div className={styles.tetrisNext}>
+              <span className={styles.statLabel}>Next</span>
+              <div className={styles.tetrisNextBoard}>
+                {nextPreview.flatMap((row, r) =>
+                  row.map((cell, c) => (
+                    <div key={`np-${r}-${c}`} className={`${styles.tetrisNextCell} ${PIECE_CLASSES[cell]}`} />
+                  )),
+                )}
+              </div>
             </div>
-            <div className={styles.statPill}>
-              <span className={styles.statLabel}>Lines</span>
-              <span className={styles.statValue}>{lines}</span>
-            </div>
+            <Stat label="Score" value={score} />
+            <Stat label="Lines" value={lines} />
+            <Stat label="Best" value={highScore.score} />
           </div>
         </div>
+
+        <GameOverlay
+          open={paused && !gameOver}
+          variant="paused"
+          title="Paused"
+          subtitle="Press P or Esc to resume"
+          actions={[{ label: 'Resume', onClick: togglePause, primary: true }]}
+        />
+
+        <GameOverlay
+          open={gameOver}
+          variant="game-over"
+          title="Game Over"
+          subtitle={justBeatHighScore ? 'New high score!' : undefined}
+          stats={[
+            { label: 'Score', value: score, highlight: justBeatHighScore },
+            { label: 'Lines', value: lines },
+            { label: 'Level', value: level },
+            { label: 'Best', value: Math.max(score, highScore.score) },
+          ]}
+          actions={[]}
+        />
       </div>
 
       <div className={styles.touchControls} aria-label="Tetris touch controls">
@@ -296,6 +449,7 @@ export default function TetrisGame({ running, restartToken, className }: Props) 
           <button type="button" className={styles.touchBtn} onClick={() => dropPiece(true)}>v</button>
           <button type="button" className={styles.touchBtn} onClick={() => moveHorizontal(1)}>{'>'}</button>
           <button type="button" className={styles.touchBtn} onClick={rotatePiece}>ROT</button>
+          <button type="button" className={styles.touchBtn} onClick={togglePause}>{paused ? 'PLAY' : 'PAUSE'}</button>
         </div>
       </div>
     </div>

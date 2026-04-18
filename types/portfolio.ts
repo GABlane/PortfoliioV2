@@ -37,7 +37,7 @@ export type ViewportMode = 'shell' | 'screen';
 
 export type Theme = 'dark' | 'light';
 
-export type GameId = 'tic-tac-toe' | 'tetris' | 'pong';
+export type GameId = 'tic-tac-toe' | 'tetris' | 'pong' | 'snake';
 
 export type GamePhase = 'idle' | 'starting' | 'running' | 'paused';
 
